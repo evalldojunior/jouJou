@@ -13,8 +13,8 @@ struct jouJouApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            Canvas()
+                //.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
