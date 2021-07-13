@@ -10,10 +10,17 @@ import SwiftUI
 
 struct Canvas: View {
     
+    @State var text = 0
+    
     var body: some View {
         NavigationView {
-            VStack {
+            ZStack {
                 
+                
+                // textos
+                ForEach((0..<text), id: \.self) { _ in
+                    TextView()
+                }
             }
             .toolbar{
                 ToolbarItem(placement: .principal) {
@@ -65,7 +72,7 @@ struct Canvas: View {
                         
                         // text
                         Button(action: {
-                            // add text action
+                            text += 1
                         }, label: {
                             Image(systemName: "textformat")
                                 .resizable()
