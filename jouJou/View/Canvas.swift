@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PencilKit
 
 struct Canvas: View {
     @State var text = 0
@@ -16,10 +17,15 @@ struct Canvas: View {
     @State  var image: [Image] = []
     @State var sourceType: UIImagePickerController.SourceType = .camera
     @State var numberOfImages = 0
+    @State private var drawingView = PKCanvasView()
+    @State var pencilTapped = false
+
     
     var body: some View {
         NavigationView {
             ZStack {
+                //desenhos
+                DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
                 //imagens
                 ForEach((0..<image.count), id: \.self) { i in
                     ImageView(image: image[i])
@@ -28,7 +34,7 @@ struct Canvas: View {
                 ForEach((0..<text), id: \.self) { _ in
                     TextView()
                 }
-                //desenhos
+                
             }
             .toolbar{
                 ToolbarItem(placement: .principal) {
@@ -75,6 +81,8 @@ struct Canvas: View {
                         // pencil
                         Button(action: {
                             // add pencil action
+                            pencilTapped.toggle()
+      
                         }, label: {
                             Image(systemName: "pencil.and.outline")
                                 .resizable()
@@ -149,7 +157,7 @@ struct Canvas: View {
     }
     func loadImage() {
         guard let inputImage = inputImage else { return }
-        var converted = Image(uiImage: inputImage)
+        let converted = Image(uiImage: inputImage)
           image.append(converted)
     }
 }
