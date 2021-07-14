@@ -24,10 +24,11 @@ struct Canvas: View {
                 ForEach((0..<image.count), id: \.self) { i in
                     ImageView(image: image[i])
                 }
-                // textos
+                //textos
                 ForEach((0..<text), id: \.self) { _ in
                     TextView()
                 }
+                //desenhos
             }
             .toolbar{
                 ToolbarItem(placement: .principal) {
@@ -82,7 +83,7 @@ struct Canvas: View {
                                 .foregroundColor(Color.blueColor)
                         })
                         
-                        // stiker
+                        // sticker
                         Button(action: {
                             // add sticker action
                         }, label: {
