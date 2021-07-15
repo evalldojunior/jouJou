@@ -41,6 +41,7 @@ struct Canvas: View {
                     HStack(spacing: 29) {
                         
                         // image
+                        
                         Button(action: {
                             numberOfImages += 1
                             self.showingImageOptions = true
@@ -48,7 +49,7 @@ struct Canvas: View {
                             Image(systemName: "photo")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 37, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 37, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }    .actionSheet(isPresented: $showingImageOptions, content: {
                             ActionSheet(title: Text("Titulo"), message: Text("mensagem"), buttons: [
@@ -74,7 +75,7 @@ struct Canvas: View {
                             Image(systemName: "music.note")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 28, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 28, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -82,12 +83,12 @@ struct Canvas: View {
                         Button(action: {
                             // add pencil action
                             pencilTapped.toggle()
-      
+                            
                         }, label: {
                             Image(systemName: "pencil.and.outline")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 30, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -98,7 +99,7 @@ struct Canvas: View {
                             Image(systemName: "seal")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 30, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -109,7 +110,7 @@ struct Canvas: View {
                             Image(systemName: "textformat")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 40, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 40, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -120,7 +121,7 @@ struct Canvas: View {
                             Image(systemName: "note.text.badge.plus")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 34, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -131,7 +132,7 @@ struct Canvas: View {
                             Image(systemName: "checkmark.square")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 28, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 28, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                         
@@ -142,14 +143,14 @@ struct Canvas: View {
                             Image(systemName: "wand.and.stars")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 34, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
                     }
                 }
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+            .background(Color.beigeColor.edgesIgnoringSafeArea(.all))
             
         }
         .navigationViewStyle(StackNavigationViewStyle())
