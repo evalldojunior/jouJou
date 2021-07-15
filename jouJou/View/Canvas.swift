@@ -19,6 +19,9 @@ struct Canvas: View {
     @State var numberOfImages = 0
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
+    @State var isPopoverPresented = false
+    @ObservableObject var StickersGrid = StickersGridView()
+
 
     
     var body: some View {
@@ -29,6 +32,10 @@ struct Canvas: View {
                 //imagens
                 ForEach((0..<image.count), id: \.self) { i in
                     ImageView(image: image[i])
+                }
+                //stickers
+                ForEach((0..<StickersGrid.stickersTapped.count), id: \.self) { k in
+                    ImageView(image: Image(systemName:StickersGrid.stickersTapped[k]))
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
@@ -70,7 +77,7 @@ struct Canvas: View {
                         
                         // song
                         Button(action: {
-                            // add song action
+                            
                         }, label: {
                             Image(systemName: "music.note")
                                 .resizable()
@@ -78,7 +85,6 @@ struct Canvas: View {
                                 .frame(width: 28, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
-                        
                         // pencil
                         Button(action: {
                             // add pencil action
@@ -94,14 +100,19 @@ struct Canvas: View {
                         
                         // sticker
                         Button(action: {
-                            // add sticker action
+                            self.isPopoverPresented = true
+
                         }, label: {
                             Image(systemName: "seal")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
-                        })
+                        }).popover(isPresented: $isPopoverPresented) {
+                                StickersGrid
+                                    .padding()
+                                .frame(width: 280, height: 280)
+                        }
                         
                         // text
                         Button(action: {
