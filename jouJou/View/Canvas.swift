@@ -20,7 +20,9 @@ struct Canvas: View {
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
     @State var isPopoverPresented = false
-    @ObservableObject var StickersGrid = StickersGridView()
+    @State var StickersGrid = StickersGridView()
+    let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
+    @State var stickersTapped: [String] = []
 
 
     
@@ -34,8 +36,8 @@ struct Canvas: View {
                     ImageView(image: image[i])
                 }
                 //stickers
-                ForEach((0..<StickersGrid.stickersTapped.count), id: \.self) { k in
-                    ImageView(image: Image(systemName:StickersGrid.stickersTapped[k]))
+                ForEach((0..<stickersTapped.count), id: \.self) { k in
+                    ImageView(image: Image(systemName:stickersTapped[k]))
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
@@ -109,7 +111,25 @@ struct Canvas: View {
                                 .frame(width: 30, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }).popover(isPresented: $isPopoverPresented) {
-                                StickersGrid
+                            GeometryReader{ geo in
+                            ScrollView{
+                                LazyVGrid(columns: [
+                                    GridItem(.flexible()),
+                                    GridItem(.flexible()),
+                                    GridItem(.flexible())
+                                ], spacing: 3){
+                                    ForEach(stickers, id: \.self){ post in
+                                        Button(action: {
+                                              stickersTapped.append(post)
+                                            isPopoverPresented.toggle()
+                                        }) {
+                                            Image(systemName: post)
+                                            .frame(width: geo.size.width/3, height: geo.size.width/3)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                                     .padding()
                                 .frame(width: 280, height: 280)
                         }
