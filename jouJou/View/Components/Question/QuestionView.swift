@@ -12,6 +12,10 @@ struct QuestionView: View {
     @State  var isShowingQuestion: Bool = true
     @State  var holdingText: String = "Eu diria que..."
     
+    init(titulo: Binding<String>){
+        self._titulo = titulo
+        UITextView.appearance().backgroundColor = .clear
+    }
     var body: some View {
         if isShowingQuestion{
             VStack{
@@ -29,11 +33,13 @@ struct QuestionView: View {
                             .foregroundColor(Color.blueColor)
                     })
                 }
-                   TextEditor(text: $holdingText)
-                        .frame(width: 660, height: 170)
-                        .font(Font.custom("Raleway-Regular", size: 20))
-                        .foregroundColor(Color.gray)
-
+                TextEditor(text: $holdingText)
+                    .font(Font.custom("Raleway-Regular", size: 20))
+                    .foregroundColor(Color.gray)
+                    .padding()
+                    .background(Color.lightSalmonColor)
+                    .cornerRadius(10)
+                    .frame(width: 660, height: 170)
             }.frame(width: 660)
         }
     }

@@ -56,7 +56,9 @@ struct Canvas: View {
                 VStack (spacing: 28){
                     //perguntas
                     ForEach((0..<questionsTapped.count), id: \.self) { question in
+                        withAnimation{
                         QuestionView(titulo: $questionsTapped[question])
+                        }
                     }
                     
                 }
