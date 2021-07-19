@@ -113,6 +113,9 @@ struct TextView: View {
                 
                 
                 Text(text)
+                    .onDrag {
+                                        NSItemProvider(object: text as NSString)
+                                    }
                     .background(GeometryReader {
                         Color.clear.preference(key: ViewHeightKey.self, value: $0.frame(in: .local).size.height)
                         Color.clear.preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
