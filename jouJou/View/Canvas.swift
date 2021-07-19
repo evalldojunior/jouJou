@@ -23,6 +23,7 @@ struct Canvas: View {
     @State var StickersGrid = StickersGridView()
     let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
     @State var stickersTapped: [String] = []
+    @State var conteudo: String = ""
 
 
     
@@ -41,12 +42,14 @@ struct Canvas: View {
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
-                    TextView()
+                    TextView(conteudo: conteudo)
+                        
+                    
                 }
                 
             }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
-                    images: $image)
+                    images: $image,text: $text, conteudo: $conteudo)
                 return dropController.receiveDrop(
                   itemProviders: providers)
               }
@@ -141,6 +144,7 @@ struct Canvas: View {
                         
                         // text
                         Button(action: {
+                            conteudo = ""
                             text += 1
                         }, label: {
                             Image(systemName: "textformat")

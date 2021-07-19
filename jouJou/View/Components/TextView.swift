@@ -51,7 +51,7 @@ struct TextView: View {
         return viewMagnificationState * simultaneousState.scale
     }
     
-    
+    public var conteudo : String
     @State var text: String = "Clique aqui para adicionar o texto"
     @State private var height: CGFloat = .zero
     @State private var width: CGFloat = .zero
@@ -60,10 +60,14 @@ struct TextView: View {
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
     
-    init(){
+    init(conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
+        print(conteudo)
+        self.conteudo = conteudo
+        print(self.conteudo)
+        
     }
     
     var body: some View {
@@ -128,15 +132,20 @@ struct TextView: View {
         .onTapGesture {
             self.endTextEditing()
         }
+        .onAppear(perform: {
+            if (self.conteudo != ""){
+              text = self.conteudo
+            }
+        })
         
     }
 }
 
-struct TextView_Previews: PreviewProvider {
-    static var previews: some View {
-        TextView()
-    }
-}
+//struct TextView_Previews: PreviewProvider {
+//    static var previews: some View {
+//       // TextView()
+//    }
+//}
 
 struct ViewHeightKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }

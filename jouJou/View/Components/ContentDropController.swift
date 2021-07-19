@@ -10,7 +10,8 @@ import SwiftUI
 
 public struct ContentDropController:DropDelegate{
     @Binding  var images: [Image]
-    @Binding  var texts: [String]
+    @Binding  var text: Int
+    @Binding var conteudo:String
 
 
     
@@ -30,7 +31,12 @@ public struct ContentDropController:DropDelegate{
         guard let inputImage = imagem else { return }
         let converted = Image(uiImage: inputImage)
           images.append(converted)
-        print("load image")
+    }
+    
+    public func loadText(texto:String){
+        conteudo = texto
+        text = text + 1
+        
     }
     
     private func dropText(
@@ -39,7 +45,7 @@ public struct ContentDropController:DropDelegate{
       _ = provider.loadObject(ofClass: String.self) { text, _ in
         let newText = text
         DispatchQueue.main.async {
-            print(newText ?? "deu errado")
+            loadText(texto: newText!)
         }
       }
     }
