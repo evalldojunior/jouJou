@@ -19,6 +19,11 @@ struct Canvas: View {
     @State var numberOfImages = 0
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
+    @State var isPopoverPresented = false
+    @State var StickersGrid = StickersGridView()
+    let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
+    @State var stickersTapped: [String] = []
+
 
     
     var body: some View {
@@ -29,6 +34,10 @@ struct Canvas: View {
                 //imagens
                 ForEach((0..<image.count), id: \.self) { i in
                     ImageView(image: image[i])
+                }
+                //stickers
+                ForEach((0..<stickersTapped.count), id: \.self) { k in
+                    ImageView(image: Image(systemName:stickersTapped[k]))
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
@@ -70,7 +79,7 @@ struct Canvas: View {
                         
                         // song
                         Button(action: {
-                            // add song action
+                            
                         }, label: {
                             Image(systemName: "music.note")
                                 .resizable()
@@ -78,7 +87,6 @@ struct Canvas: View {
                                 .frame(width: 28, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         })
-                        
                         // pencil
                         Button(action: {
                             // add pencil action
@@ -94,14 +102,37 @@ struct Canvas: View {
                         
                         // sticker
                         Button(action: {
-                            // add sticker action
+                            self.isPopoverPresented = true
+
                         }, label: {
                             Image(systemName: "seal")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
-                        })
+                        }).popover(isPresented: $isPopoverPresented) {
+                            GeometryReader{ geo in
+                            ScrollView{
+                                LazyVGrid(columns: [
+                                    GridItem(.flexible()),
+                                    GridItem(.flexible()),
+                                    GridItem(.flexible())
+                                ], spacing: 3){
+                                    ForEach(stickers, id: \.self){ post in
+                                        Button(action: {
+                                              stickersTapped.append(post)
+                                            isPopoverPresented.toggle()
+                                        }) {
+                                            Image(systemName: post)
+                                            .frame(width: geo.size.width/3, height: geo.size.width/3)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                                    .padding()
+                                .frame(width: 280, height: 280)
+                        }
                         
                         // text
                         Button(action: {
