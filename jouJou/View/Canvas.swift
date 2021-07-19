@@ -44,7 +44,12 @@ struct Canvas: View {
                     TextView()
                 }
                 
-            }
+            }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
+                let dropController = ContentDropController(
+                    images: $image)
+                return dropController.receiveDrop(
+                  itemProviders: providers)
+              }
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 29) {
