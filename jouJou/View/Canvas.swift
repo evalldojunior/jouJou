@@ -30,7 +30,7 @@ struct Canvas: View {
     //question
     @State var questionTitle = ""
     @State var isQuestionPopoverPresented = false
-    @State var questions = ["tais bem?", "o que te deixa irritado?", "o que te faz feliz?", "quais as novidades?", "o que tem te deixado ansioso?"]
+    @State var questions = ["tais bem?", "o que te deixa irritado?", "o que te faz feliz?", "quais as novidades?", "o que tem te deixado ansioso?", "como tem se sentido?", "quais habitos te fazem bem?", "quais habitos te fazem mal?"]
     @State var questionsTapped: [String] = []
     
     
@@ -179,7 +179,14 @@ struct Canvas: View {
                                 .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }).popover(isPresented: $isQuestionPopoverPresented) {
-                            List{
+                            VStack{
+                                HStack{
+                                    Spacer()
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(Color.blueColor)
+                                }.padding()
+                                List{
                                 ForEach(questions, id: \.self){ question in
                                     Button(action: {
                                         questionsTapped.append(question)
@@ -190,8 +197,8 @@ struct Canvas: View {
                                         
                                     }
                                 }
-                            }
-                            .frame(width: 280, height: 280)
+                            }.frame(width: 280, height: 280)
+                        }
                         }
                         
                         // MARK: - Tool: checklist
