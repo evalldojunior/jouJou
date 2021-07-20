@@ -37,20 +37,24 @@ struct QuestionView: View {
                             .foregroundColor(Color.blueColor)
                     })
                 }
-                ZStack{
+                ZStack (alignment: .topLeading){
                     TextEditor(text: $holdingText)
                         .font(Font.custom("Raleway-Regular", size: 20))
                         .foregroundColor(Color.gray)
                         .padding()
                         .background(Color.lightSalmonColor)
                         .cornerRadius(10)
-                        .frame(width: 660, height: height2 + 170)
+                        .frame(width: 660, height: height2)
                     
                     Text(holdingText)
-                        .background(GeometryReader {
+                        .font(Font.custom("Raleway-Regular", size: 20))
+                        .padding()
+                        .multilineTextAlignment(.leading)
+                        .background(GeometryReader { /// quaseeee aff
                             Color.clear.preference(key: ViewHeightKey2.self, value: $0.frame(in: .local).size.height)
                         })
                         .opacity(0)
+                        .frame(width: 660, alignment: .leading)
                 }.onPreferenceChange(ViewHeightKey2.self) { height2 = $0 }
                 
             }.frame(width: 660)
@@ -64,7 +68,7 @@ struct QuestionView_Previews: PreviewProvider {
     }
 }
 struct ViewHeightKey2: PreferenceKey {
-    static var defaultValue: CGFloat { 0 }
+    static var defaultValue: CGFloat { 140 } //quase nada amkigo
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
         print("Reporting height: \(value)")
