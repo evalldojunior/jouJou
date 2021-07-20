@@ -12,6 +12,10 @@ struct QuestionView: View {
     @State  var isShowingQuestion: Bool = true
     @State  var holdingText: String = "Eu diria que..."
     
+    @State var text: String = "Clique aqui para adicionar o texto"
+    @State private var height2: CGFloat = .zero
+    @State private var width2: CGFloat = .zero
+    
     init(titulo: Binding<String>){
         self._titulo = titulo
         UITextView.appearance().backgroundColor = .clear
@@ -33,13 +37,22 @@ struct QuestionView: View {
                             .foregroundColor(Color.blueColor)
                     })
                 }
-                TextEditor(text: $holdingText)
-                    .font(Font.custom("Raleway-Regular", size: 20))
-                    .foregroundColor(Color.gray)
-                    .padding()
-                    .background(Color.lightSalmonColor)
-                    .cornerRadius(10)
-                    .frame(width: 660, height: 170)
+                ZStack{
+                    TextEditor(text: $holdingText)
+                        .font(Font.custom("Raleway-Regular", size: 20))
+                        .foregroundColor(Color.gray)
+                        .padding()
+                        .background(Color.lightSalmonColor)
+                        .cornerRadius(10)
+                        .frame(width: 660, height: height2 + 170)
+                    
+                    Text(holdingText)
+                        .background(GeometryReader {
+                            Color.clear.preference(key: ViewHeightKey2.self, value: $0.frame(in: .local).size.height)
+                        })
+                        .opacity(0)
+                }.onPreferenceChange(ViewHeightKey2.self) { height2 = $0 }
+                
             }.frame(width: 660)
         }
     }
@@ -48,5 +61,12 @@ struct QuestionView: View {
 struct QuestionView_Previews: PreviewProvider {
     static var previews: some View {
         QuestionView(titulo: .constant("Como tais se sentindo, mana?"))
+    }
+}
+struct ViewHeightKey2: PreferenceKey {
+    static var defaultValue: CGFloat { 0 }
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = value + nextValue()
+        print("Reporting height: \(value)")
     }
 }
