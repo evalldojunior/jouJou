@@ -61,10 +61,14 @@ class TextFieldAlertViewController: UIViewController {
     // create a `Done` action that updates the `isPresented` binding when tapped
     // this is just for Demo only but we should really inject
     // an array of buttons (with their title, style and tap handler)
-    let action = UIAlertAction(title: "Done", style: .default) { [weak self] _ in
+    let addingAction = UIAlertAction(title: "Adicionar", style: .default) { [weak self] _ in
       self?.isPresented?.wrappedValue = false
     }
-    vc.addAction(action)
+    let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) { [weak self] _ in
+      self?.isPresented?.wrappedValue = false
+    }
+    vc.addAction(addingAction)
+    vc.addAction(cancelAction)
     present(vc, animated: true, completion: nil)
   }
 }

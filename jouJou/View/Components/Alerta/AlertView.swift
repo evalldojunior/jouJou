@@ -15,7 +15,7 @@ struct AlertView: View {
         Text("My Demo View")
           .textFieldAlert(isPresented: $alertIsPresented) { () -> TextFieldAlert in
             TextFieldAlert(title: "Alert Title", message: "Alert Message", text: self.$text)
-        }
+        }//
       }
 }
 

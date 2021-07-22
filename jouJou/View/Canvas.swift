@@ -12,6 +12,7 @@ import PencilKit
 struct Canvas: View {
     //text
     @State var text = 0
+    
     //image
     @State private var showingImagePicker = false
     @State private var showingImageOptions = false
@@ -19,20 +20,24 @@ struct Canvas: View {
     @State  var image: [Image] = []
     @State var sourceType: UIImagePickerController.SourceType = .camera
     @State var numberOfImages = 0
+    
     //drawing
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
+    
     //sticker
     @State var isStickerPopoverPresented = false
     @State var StickersGrid = StickersGridView()
     let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
     @State var stickersTapped: [String] = []
+    
     //question
     @State var questionTitle = ""
     @State var isQuestionPopoverPresented = false
     @State var questions = ["tais bem?", "o que te deixa irritado?", "o que te faz feliz?", "quais as novidades?", "o que tem te deixado ansioso?", "como tem se sentido?", "quais habitos te fazem bem?", "quais habitos te fazem mal?"]
     @State var questionsTapped: [String] = []
-    
+    @State var alertIsPresented = false
+    @State var newQuestion: String?
     
     var body: some View {
         NavigationView {
@@ -182,9 +187,15 @@ struct Canvas: View {
                             VStack{
                                 HStack{
                                     Spacer()
-                                    Image(systemName: "plus.circle.fill")
-                                        .font(.system(size: 24))
-                                        .foregroundColor(Color.blueColor)
+                                    Button(action: {
+                                        alertIsPresented = true
+                                    }, label: {
+                                        Image(systemName: "plus.circle.fill")
+                                            .font(.system(size: 24))
+                                            .foregroundColor(Color.blueColor)
+                                    }).textFieldAlert(isPresented: $alertIsPresented) { () -> TextFieldAlert in
+                                        TextFieldAlert(title: "Escreva uma nova pergunta", message: "", text: self.$newQuestion)
+                                    }
                                 }.padding()
                                 List{
                                 ForEach(questions, id: \.self){ question in
