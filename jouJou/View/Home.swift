@@ -29,7 +29,12 @@ struct Home: View {
             ZStack {
                 ScrollView {
                     VStack {
-                        
+                        ///calendario
+                        Calendar()
+                            .frame(width: 640, height: 570)
+                            .padding(56)
+                            
+
                         /// resumo do mes
                         HStack {
                             VStack(alignment: .leading, spacing: 7){

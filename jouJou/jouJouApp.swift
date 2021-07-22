@@ -15,8 +15,9 @@ struct jouJouApp: App {
         WindowGroup {
             //Introduction()
             //SelectStyle(name: "Evaldo")
-            Humor()
-            //Home()
+            //Humor()
+            Home()
+            //Calendar()
                 //.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
