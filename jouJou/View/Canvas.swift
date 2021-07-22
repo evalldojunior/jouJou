@@ -36,6 +36,10 @@ struct Canvas: View {
     @State var questions = ["tais bem?", "o que te deixa irritado?", "o que te faz feliz?", "quais as novidades?", "o que tem te deixado ansioso?"]
     @State var questionsTapped: [String] = []
     
+    //background
+    @State var isBackgroundPopoverPresented = false
+    @State var backgroundType = "Papel-Liso"
+    
     
     var body: some View {
         NavigationView {
@@ -61,11 +65,14 @@ struct Canvas: View {
                     //perguntas
                     ForEach((0..<questionsTapped.count), id: \.self) { question in
                         withAnimation{
-                        QuestionView(titulo: $questionsTapped[question])
+                            QuestionView(titulo: $questionsTapped[question])
                         }
                     }
                     
                 }
+
+            
+
             }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
@@ -217,19 +224,54 @@ struct Canvas: View {
                         
                         // MARK: - Tool: background
                         Button(action: {
-                            // add background action
+                            self.isBackgroundPopoverPresented.toggle()
                         }, label: {
                             Image(systemName: "wand.and.stars")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
-                        })
+                        }).popover(isPresented: $isBackgroundPopoverPresented) {
+                            List{
+                                //papel liso
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
+                                        backgroundType = "Papel-Liso"
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Liso", icon: "icone-papel-liso")
+                                })
+                                //papel pautado
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
+                                        backgroundType = "Papel-Pautado"
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Pautado", icon: "icone-papel-pautado")
+                                })
+                                //papel quadriculado
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
+                                        backgroundType = "Papel-Quadriculado"
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
+                                })
+                            }.padding(.top, 34)
+                            .frame(width: 280, height: 280)
+                        }
                     }
                 }
             }
             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(Color.beigeColor.edgesIgnoringSafeArea(.all))
+            .background(
+                Image(backgroundType)
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+            )
             
         }
         .navigationViewStyle(StackNavigationViewStyle())
