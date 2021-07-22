@@ -270,6 +270,7 @@ struct Canvas: View {
             .background(
                 Image(backgroundType)
                     .resizable()
+                    .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
             )
             
