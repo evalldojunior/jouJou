@@ -27,6 +27,9 @@ struct Canvas: View {
     @State var StickersGrid = StickersGridView()
     let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
     @State var stickersTapped: [String] = []
+    @State var conteudo: String = ""
+
+
     //question
     @State var questionTitle = ""
     @State var isQuestionPopoverPresented = false
@@ -54,10 +57,11 @@ struct Canvas: View {
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
-                    TextView()
+                    TextView(conteudo: conteudo)
+                        
+                    
                 }
-                
-                VStack (spacing: 28){
+                 VStack (spacing: 28){
                     //perguntas
                     ForEach((0..<questionsTapped.count), id: \.self) { question in
                         withAnimation{
@@ -66,9 +70,16 @@ struct Canvas: View {
                     }
                     
                 }
-            }
+
             
-            
+
+            }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
+                let dropController = ContentDropController(
+                    images: $image,text: $text, conteudo: $conteudo)
+                return dropController.receiveDrop(
+                  itemProviders: providers)
+              }
+
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 29) {
@@ -162,6 +173,7 @@ struct Canvas: View {
                         
                         // MARK: - Tool: text
                         Button(action: {
+                            conteudo = ""
                             text += 1
                         }, label: {
                             Image(systemName: "textformat")
