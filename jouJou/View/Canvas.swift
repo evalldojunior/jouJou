@@ -212,7 +212,7 @@ struct Canvas: View {
                         
                         // MARK: - Tool: background
                         Button(action: {
-                            self.isBackgroundPopoverPresented = true
+                            self.isBackgroundPopoverPresented.toggle()
                         }, label: {
                             Image(systemName: "wand.and.stars")
                                 .resizable()
@@ -220,26 +220,35 @@ struct Canvas: View {
                                 .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }).popover(isPresented: $isBackgroundPopoverPresented) {
-                                List{
-                                    //papel liso
-                                    Button(action: {
+                            List{
+                                //papel liso
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
                                         backgroundType = "Papel-Liso"
-                                    }, label: {
-                                        styleRow(type: "Papel Liso", icon: "icone-papel-liso")
-                                    })
-                                    //papel pautado
-                                    Button(action: {
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Liso", icon: "icone-papel-liso")
+                                })
+                                //papel pautado
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
                                         backgroundType = "Papel-Pautado"
-                                    }, label: {
-                                        styleRow(type: "Papel Pautado", icon: "icone-papel-pautado")
-                                    })
-                                    //papel quadriculado
-                                    Button(action: {
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Pautado", icon: "icone-papel-pautado")
+                                })
+                                //papel quadriculado
+                                Button(action: {
+                                    withAnimation{
+                                        self.isBackgroundPopoverPresented.toggle()
                                         backgroundType = "Papel-Quadriculado"
-                                    }, label: {
-                                        styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
-                                    })
-                                }.padding(.top, 34)
+                                    }
+                                }, label: {
+                                    styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
+                                })
+                            }.padding(.top, 34)
                             .frame(width: 280, height: 280)
                         }
                     }
