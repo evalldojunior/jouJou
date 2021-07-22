@@ -11,6 +11,7 @@
 		08008D7C26A0B6F2003F9101 /* SelectStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08008D7B26A0B6F2003F9101 /* SelectStyle.swift */; };
 		08349FF7269F81860050348B /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08349FF6269F81860050348B /* Introduction.swift */; };
 		08D3E56926A5EA7C00438A1C /* Humor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E56826A5EA7C00438A1C /* Humor.swift */; };
+		08D3E56B26A6066700438A1C /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E56A26A6066700438A1C /* Home.swift */; };
 		08DAEB77269E15AF00B05EB6 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DAEB76269E15AF00B05EB6 /* Colors.swift */; };
 		08DAEB8B269E16FC00B05EB6 /* Raleway-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08DAEB79269E16FB00B05EB6 /* Raleway-Medium.ttf */; };
 		08DAEB8C269E16FC00B05EB6 /* Raleway-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08DAEB7A269E16FB00B05EB6 /* Raleway-ExtraBold.ttf */; };
@@ -73,6 +74,7 @@
 		08008D7B26A0B6F2003F9101 /* SelectStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStyle.swift; sourceTree = "<group>"; };
 		08349FF6269F81860050348B /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
 		08D3E56826A5EA7C00438A1C /* Humor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Humor.swift; sourceTree = "<group>"; };
+		08D3E56A26A6066700438A1C /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		08DAEB76269E15AF00B05EB6 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		08DAEB79269E16FB00B05EB6 /* Raleway-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-Medium.ttf"; sourceTree = "<group>"; };
 		08DAEB7A269E16FB00B05EB6 /* Raleway-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Raleway-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				08DAEBA6269E1AFF00B05EB6 /* Canvas.swift */,
 				08349FF6269F81860050348B /* Introduction.swift */,
 				08D3E56826A5EA7C00438A1C /* Humor.swift */,
+				08D3E56A26A6066700438A1C /* Home.swift */,
 				08008D7B26A0B6F2003F9101 /* SelectStyle.swift */,
 			);
 			path = View;
@@ -462,6 +465,7 @@
 				6FF7AEE52694ED6B0079874A /* jouJouApp.swift in Sources */,
 				A862F101269E31A000D903B1 /* ImagePicker.swift in Sources */,
 				6FF7AEF12694ED6E0079874A /* jouJou.xcdatamodeld in Sources */,
+				08D3E56B26A6066700438A1C /* Home.swift in Sources */,
 				08DAEBA7269E1AFF00B05EB6 /* Canvas.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

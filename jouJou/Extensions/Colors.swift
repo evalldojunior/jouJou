@@ -17,4 +17,5 @@ extension Color {
     static let orangeColor = Color(UIColor(named:"orangeColor")!)
     static let darkSalmonColor = Color(UIColor(named:"darkSalmonColor")!)
     static let lightSalmonColor = Color(UIColor(named:"lightSalmonColor")!)
+    static let whiteColor = Color(UIColor(named:"whiteColor")!)
 }
