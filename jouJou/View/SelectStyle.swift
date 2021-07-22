@@ -52,110 +52,117 @@ struct SelectStyle: View {
     }
     
     var body: some View {
-        
-        ZStack{
-            VStack {
-                Text("Qual tipo de escrita é mais a sua cara?")
-                    .font(.custom("Raleway-Semibold", size: 24))
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.center)
+        GeometryReader{ geometry in
+            ZStack{
+                VStack {
+                    Text("Qual tipo de escrita é mais a sua cara?")
+                        .font(.custom("Raleway-Semibold", size: 24))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                    
+                    Spacer().frame(height: 95)
+                    
+                    VStack{
+                        LazyVGrid(columns: collums, alignment: .center, spacing: 50) {
+                            ForEach(0..<styles.count, id: \.self) { index in
+                                Button(action: {
+                                    selectedStyle = styles[index]
+                                    //isSelected = index
+                                    withAnimation(){
+                                        isSelected = index
+                                    }
+                                }, label: {
+                                    VStack(alignment:.center, spacing: 0){
+                                        Image("\(ImageStyles[index])")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding(5)
+                                        HStack {
+                                            Spacer()
+                                            Text("\(styles[index])")
+                                                .font(.custom("Raleway-Bold", size: 20))
+                                                .foregroundColor(.beigeColor)
+                                                .multilineTextAlignment(.center)
+                                                .padding(7)
+                                            Spacer()
+                                        }
+                                    }.padding(5)
+                                    
+                                }).frame(width: ipad13inch() ? 250 : 196 , height: ipad13inch() ? 250 : 196)
+                                .clipped()
+                                .background(selected(index: index) ? Color.orangeColor : Color.greenColor)
+                                .cornerRadius(10)
+                                .shadow(radius: 6)
+                            }
+                        }
+                        
+                    }
+                    
+                    Spacer().frame(height: 95)
+                    
+                    Text("Você pode sempre alterar a forma de escrita nas configurações.")
+                        .font(.custom("Raleway-Regular", size: 20))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                    
+                }
                 
-                Spacer().frame(height: 95)
-                
-                VStack{
-                    LazyVGrid(columns: collums, alignment: .center, spacing: 50) {
-                        ForEach(0..<styles.count, id: \.self) { index in
-                            Button(action: {
-                                selectedStyle = styles[index]
-                                //isSelected = index
-                                withAnimation(){
-                                    isSelected = index
-                                }
-                            }, label: {
-                                VStack(alignment:.center, spacing: 0){
-                                    Image("\(ImageStyles[index])")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .padding(5)
+                VStack {
+                    Spacer()
+                    Text("Nos ajude a te conhecer melhor, \(name)!")
+                        .font(.custom("LibreBaskerville-Regular", size: 40))
+                        .frame(width: 540)
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                    
+                    Spacer()
+                    
+                    Rectangle()
+                        .frame(height: 435)
+                        .foregroundColor(.clear)
+                    
+                    Spacer()
+                    /// next page button
+                    VStack {
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: Humor()) {
+                                Button(action: {
+                                    //action
+                                }, label: {
                                     HStack {
                                         Spacer()
-                                        Text("\(styles[index])")
-                                            .font(.custom("Raleway-Bold", size: 20))
+                                        Text("Avançar")
+                                            .font(.custom("Raleway-SemiBold", size: 24))
+                                            .fontWeight(.semibold)
                                             .foregroundColor(.beigeColor)
                                             .multilineTextAlignment(.center)
                                             .padding(7)
                                         Spacer()
                                     }
-                                }.padding(5)
+                                    
+                                }).frame(width:230 , height: 51)
+                                .clipped()
+                                .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
+                                .cornerRadius(50)
+                                .shadow(radius: disable() ? 0 : 6)
+                                .disabled(!disable())
                                 
-                            }).frame(width: ipad13inch() ? 250 : 196 , height: ipad13inch() ? 250 : 196)
-                            .clipped()
-                            .background(selected(index: index) ? Color.orangeColor : Color.greenColor)
-                            .cornerRadius(10)
-                            .shadow(radius: 6)
-                        }
-                    }
-                    
-                }
-                
-                Spacer().frame(height: 95)
-                
-                Text("Você pode sempre alterar a forma de escrita nas configurações.")
-                    .font(.custom("Raleway-Regular", size: 20))
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.center)
-                
-            }
-            
-            VStack {
-                Spacer()
-                Text("Nos ajude a te conhecer melhor, \(name)!")
-                    .font(.custom("LibreBaskerville-Regular", size: 40))
-                    .frame(width: 540)
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.center)
-                
-                Spacer()
-                
-                Rectangle()
-                    .frame(height: 435)
-                    .foregroundColor(.clear)
-                
-                Spacer()
-                /// next page button
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            //action
-                        }, label: {
-                            HStack {
-                                Spacer()
-                                Text("Avançar")
-                                    .font(.custom("Raleway-SemiBold", size: 24))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.beigeColor)
-                                    .multilineTextAlignment(.center)
-                                    .padding(7)
-                                Spacer()
                             }
-                            
-                        }).frame(width:230 , height: 51)
-                        .clipped()
-                        .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
-                        .cornerRadius(50)
-                        .shadow(radius: disable() ? 0 : 6)
-                        .disabled(disable())
-                        Spacer()
+                            Spacer()
+                        }
+                        
+                        Spacer().frame(height: 90)
                     }
-                    
-                    Spacer().frame(height: 90)
                 }
             }
+            .padding(.horizontal, 90)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+            .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+            
         }
-        .padding(.horizontal, 90)
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .leading)
-        .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+        .navigationTitle("")
+        .navigationBarHidden(true)
         
     }
 }

@@ -22,7 +22,7 @@ struct Canvas: View {
 
     
     var body: some View {
-        NavigationView {
+        ZStack {
             ZStack {
                 //desenhos
                 DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
@@ -152,6 +152,14 @@ struct Canvas: View {
             .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
             
         }
+        .onAppear(perform: {
+            
+            self.pencilTapped = false
+        })
+        .onDisappear(perform: {
+            self.pencilTapped = false
+        })
+        .navigationTitle("")
         .navigationViewStyle(StackNavigationViewStyle())
         
     }

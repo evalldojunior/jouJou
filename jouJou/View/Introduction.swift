@@ -25,141 +25,153 @@ struct Introduction: View {
     }
     
     var body: some View {
-        ZStack{
-            VStack(alignment: .leading, spacing: 15) {
-                Text("teChame")
-                    .font(.custom("Raleway-Regular", size: 24))
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.leading)
-                TextField("| ", text: $name)
-                    .font(.custom("Raleway-Regular", size: 20))
-                    .foregroundColor(Color.blackColor)
-                    .padding()
-                    .background(Color.lightSalmonColor)
-                    .cornerRadius(10)
-                
-                Spacer()
-                    .frame(height:110)
-                
-                Text("pronomes")
-                    .font(.custom("Raleway-Regular", size: 24))
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.leading)
-                DisclosureGroup(isExpanded: $isExpanded) {
-                    GeometryReader() { geometry in
-                        VStack(spacing:0) {
-                            Spacer().frame(height:10)
-                            ForEach(pronouns, id: \.self) { pronoun in
-                                Text(pronoun)
-                                    .font(.custom("Raleway-Regular", size: 20))
-                                    .foregroundColor(Color.blackColor)
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .background(Color.lightSalmonColor)
-                                    .onTapGesture {
-                                        self.selectedPronoun = pronoun
-                                        withAnimation() {
-                                            self.isExpanded.toggle()
-                                        }
-                                    }
-                                
-                                Divider()
-                                    .background(Color.darkSalmonColor)
-                                
-                            }
-                        }.frame(width: geometry.size.width)
+        NavigationView {
+            GeometryReader { geo in
+                ZStack{
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text("teChame")
+                            .font(.custom("Raleway-Regular", size: 24))
+                            .foregroundColor(Color.blackColor)
+                            .multilineTextAlignment(.leading)
+                        TextField("| ", text: $name)
+                            .font(.custom("Raleway-Regular", size: 20))
+                            .foregroundColor(Color.blackColor)
+                            .padding()
+                            .background(Color.lightSalmonColor)
+                            .cornerRadius(10)
                         
-                    }.frame(height:170)
-                    
-                } label: {
-                    HStack {
-                        Text(selectedPronoun)
+                        Spacer()
+                            .frame(height:110)
+                        
+                        Text("pronomes")
+                            .font(.custom("Raleway-Regular", size: 24))
+                            .foregroundColor(Color.blackColor)
+                            .multilineTextAlignment(.leading)
+                        DisclosureGroup(isExpanded: $isExpanded) {
+                            GeometryReader() { geometry in
+                                VStack(spacing:0) {
+                                    Spacer().frame(height:10)
+                                    ForEach(pronouns, id: \.self) { pronoun in
+                                        Text(pronoun)
+                                            .font(.custom("Raleway-Regular", size: 20))
+                                            .foregroundColor(Color.blackColor)
+                                            .padding()
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .background(Color.lightSalmonColor)
+                                            .onTapGesture {
+                                                self.selectedPronoun = pronoun
+                                                withAnimation() {
+                                                    self.isExpanded.toggle()
+                                                }
+                                            }
+                                        
+                                        Divider()
+                                            .background(Color.darkSalmonColor)
+                                        
+                                    }
+                                }.frame(width: geometry.size.width)
+                                
+                            }.frame(height:170)
+                            
+                        } label: {
+                            HStack {
+                                Text(selectedPronoun)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                self.endTextEditing()
+                                withAnimation {
+                                    isExpanded.toggle()
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.lightSalmonColor)
+                        .cornerRadius(10)
+                        .font(.custom("Raleway-Regular", size: 20))
+                        .foregroundColor(Color.blackColor)
+                        .accentColor(Color.blueColor)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
+                    
+                    VStack(alignment: .leading, spacing: 15) {
+                        /// logo
+                        Spacer()//.frame(height: 150)
+                        VStack {
+                            Text("Olá! Bem-vinde ao")
+                                .font(.custom("LibreBaskerville-Regular", size: 30))
+                            HStack(alignment: .center, spacing: -15){
+                                Spacer()
+                                Text(" jou")
+                                    .font(.custom("LibreBaskerville-Regular", size: 64))
+                                    .foregroundColor(Color.blueColor)
+                                Text(" jou")
+                                    .font(.custom("LibreBaskerville-Regular", size: 64))
+                                    .foregroundColor(Color.darkSalmonColor)
+                                Spacer()
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        
+                        Rectangle()
+                            .frame(height: 435)
+                            .foregroundColor(.clear)
+                        
+                        Spacer()
+                        
+                        /// next page button
+                        VStack {
+                            HStack {
+                                Spacer()
+                                NavigationLink(destination: SelectStyle(name: name)) {
+                                    Button(action: {
+                                        //action
+                                    }, label: {
+                                        HStack {
+                                            Spacer()
+                                            Text("Avançar")
+                                                .font(.custom("Raleway-SemiBold", size: 24))
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(.beigeColor)
+                                                .multilineTextAlignment(.center)
+                                                .padding(7)
+                                            Spacer()
+                                        }
+                                        
+                                    }).frame(width:230 , height: 51)
+                                    .clipped()
+                                    .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
+                                    .cornerRadius(50)
+                                    .shadow(radius: disable() ? 0 : 6)
+                                    .disabled(!disable())
+                                    
+                                }
+                                Spacer()
+                            }
+                            
+                            Spacer().frame(height: 90)
+                        }
+                    }
+                }
+                .padding(.horizontal, 90)
+                .frame(width: geo.size.width, height: geo.size.height, alignment: .leading)
+                .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+                .onTapGesture {
+                    self.endTextEditing()
+                    if isExpanded {
                         withAnimation {
                             isExpanded.toggle()
                         }
                     }
                 }
-                .padding()
-                .background(Color.lightSalmonColor)
-                .cornerRadius(10)
-                .font(.custom("Raleway-Regular", size: 20))
-                .foregroundColor(Color.blackColor)
-                .accentColor(Color.blueColor)
             }
             
-            VStack(alignment: .leading, spacing: 15) {
-                /// logo
-                Spacer()//.frame(height: 150)
-                VStack {
-                    Text("Olá! Bem-vinde ao")
-                        .font(.custom("LibreBaskerville-Regular", size: 30))
-                    HStack(alignment: .center, spacing: -15){
-                        Spacer()
-                        Text(" jou")
-                            .font(.custom("LibreBaskerville-Regular", size: 64))
-                            .foregroundColor(Color.blueColor)
-                        Text(" jou")
-                            .font(.custom("LibreBaskerville-Regular", size: 64))
-                            .foregroundColor(Color.darkSalmonColor)
-                        Spacer()
-                    }
-                }
-                
-                Spacer()
-                
-            
-                Rectangle()
-                    .frame(height: 435)
-                    .foregroundColor(.clear)
-                
-                Spacer()
-                
-                /// next page button
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            //action
-                        }, label: {
-                            HStack {
-                                Spacer()
-                                Text("Avançar")
-                                    .font(.custom("Raleway-SemiBold", size: 24))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.beigeColor)
-                                    .multilineTextAlignment(.center)
-                                    .padding(7)
-                                Spacer()
-                            }
-                            
-                        }).frame(width:230 , height: 51)
-                        .clipped()
-                        .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
-                        .cornerRadius(50)
-                        .shadow(radius: disable() ? 0 : 6)
-                        .disabled(disable())
-                        Spacer()
-                    }
-                    
-                    Spacer().frame(height: 90)
-                }
-            }
+            .navigationTitle("")
+            .navigationBarHidden(true)
         }
-        .padding(.horizontal, 90)
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .leading)
-        .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
-        .onTapGesture {
-            self.endTextEditing()
-            if isExpanded {
-                withAnimation {
-                    isExpanded.toggle()
-                }
-            }
-        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

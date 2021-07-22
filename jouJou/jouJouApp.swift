@@ -13,7 +13,10 @@ struct jouJouApp: App {
 
     var body: some Scene {
         WindowGroup {
+            //Introduction()
+            //SelectStyle(name: "Evaldo")
             Humor()
+            //Home()
                 //.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

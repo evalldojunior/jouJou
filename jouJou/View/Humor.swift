@@ -11,6 +11,7 @@ import SwiftUI
 struct Humor: View {
     @State var isSelected = -1
     @State var selectedMood = ""
+    @State private var isPresented = false
     
     var moods: [String] = ["Animade!", "Tranquile", "OK", "Ansiose", "Estressade", "Para Baixo"]
     var ImageMoods: [String] = ["exemplo", "exemplo", "exemplo", "exemplo", "exemplo", "exemplo"]
@@ -56,111 +57,133 @@ struct Humor: View {
     }
     
     var body: some View {
-        ZStack{
-            VStack {
-                Text("Como você está se sentindo?")
-                    .font(.custom("Raleway-Semibold", size: 24))
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.center)
-                
-                Spacer().frame(height: 60)
-                
-                VStack{
-                    LazyVGrid(columns: collums, alignment: .center, spacing: 30) {
-                        ForEach(0..<moods.count, id: \.self) { index in
-                            VStack {
-                                Button(action: {
-                                    selectedMood = moods[index]
-                                    withAnimation(){
-                                        isSelected = index
+        NavigationView {
+            GeometryReader { geometry in
+                ZStack{
+                    VStack {
+                        Text("Como você está se sentindo?")
+                            .font(.custom("Raleway-Semibold", size: 24))
+                            .foregroundColor(Color.blackColor)
+                            .multilineTextAlignment(.center)
+                        
+                        Spacer().frame(height: 60)
+                        
+                        VStack{
+                            LazyVGrid(columns: collums, alignment: .center, spacing: 30) {
+                                ForEach(0..<moods.count, id: \.self) { index in
+                                    VStack {
+                                        Button(action: {
+                                            selectedMood = moods[index]
+                                            withAnimation(){
+                                                isSelected = index
+                                            }
+                                        }, label: {
+                                            VStack(alignment:.center, spacing: 0){
+                                                Image("\(ImageMoods[index])")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .padding(10)
+                                            }.padding(5)
+                                        }).frame(width: ipad13inch() ? 220 : 170 , height: ipad13inch() ? 220 : 170)
+                                        .clipped()
+                                        .background(selected(index: index) ? Color.orangeColor : colorMoods[index])
+                                        .cornerRadius(10)
+                                        .shadow(radius: 6)
+                                        
+                                        HStack {
+                                            Spacer()
+                                            Text("\(moods[index])")
+                                                .font(.custom("Raleway-Regular", size: 20))
+                                                .foregroundColor(.blackColor)
+                                                .multilineTextAlignment(.center)
+                                                .padding(7)
+                                            Spacer()
+                                        }
                                     }
-                                }, label: {
-                                    VStack(alignment:.center, spacing: 0){
-                                        Image("\(ImageMoods[index])")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .padding(10)
-                                    }.padding(5)
-                                }).frame(width: ipad13inch() ? 220 : 170 , height: ipad13inch() ? 220 : 170)
-                                .clipped()
-                                .background(selected(index: index) ? Color.orangeColor : colorMoods[index])
-                                .cornerRadius(10)
-                                .shadow(radius: 6)
-                                
-                                HStack {
-                                    Spacer()
-                                    Text("\(moods[index])")
-                                        .font(.custom("Raleway-Regular", size: 20))
-                                        .foregroundColor(.blackColor)
-                                        .multilineTextAlignment(.center)
-                                        .padding(7)
-                                    Spacer()
                                 }
                             }
                         }
+                        Spacer().frame(height: ipad10inch() ? 40 : 0)
                     }
-                }
-                Spacer().frame(height: ipad10inch() ? 40 : 0)
-            }
-            
-            VStack {
-                Spacer()
-                Text("Bem-vinde de volta!")
-                    .font(.custom("LibreBaskerville-Regular", size: 40))
-                    .frame(width: 540)
-                    .foregroundColor(Color.blackColor)
-                    .multilineTextAlignment(.center)
-                
-                Spacer()
-                
-                Rectangle()
-                    .frame(height: 480)
-                    .foregroundColor(.clear)
-                
-                Spacer()
-                
-                /// next page button
-                VStack(spacing: 5) {
-                    HStack {
+                    
+                    VStack {
                         Spacer()
-                        Button(action: {
-                            //action escrever sobre isso
-                        }, label: {
+                        Text("Bem-vinde de volta!")
+                            .font(.custom("LibreBaskerville-Regular", size: 40))
+                            .frame(width: 540)
+                            .foregroundColor(Color.blackColor)
+                            .multilineTextAlignment(.center)
+                        
+                        Spacer()
+                        
+                        Rectangle()
+                            .frame(height: 480)
+                            .foregroundColor(.clear)
+                        
+                        Spacer()
+                        
+                        /// next page button
+                        VStack(spacing: 5) {
                             HStack {
                                 Spacer()
-                                Text("Escrever sobre isso")
-                                    .font(.custom("Raleway-SemiBold", size: 24))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.beigeColor)
-                                    .multilineTextAlignment(.center)
-                                    .padding(7)
+                                NavigationLink(destination: Canvas()) {
+                                    Button(action: {
+                                        //action escrever sobre isso
+                                    }, label: {
+                                        HStack {
+                                            Spacer()
+                                            Text("Escrever sobre isso")
+                                                .font(.custom("Raleway-SemiBold", size: 24))
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(.beigeColor)
+                                                .multilineTextAlignment(.center)
+                                                .padding(7)
+                                            Spacer()
+                                        }
+                                        
+                                    }).frame(width:440 , height: 51)
+                                    .clipped()
+                                    .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
+                                    .cornerRadius(50)
+                                    .shadow(radius: disable() ? 0 : 6)
+                                    .disabled(!disable())
+                                }
                                 Spacer()
                             }
                             
-                        }).frame(width:440 , height: 51)
-                        .clipped()
-                        .background(Color.blueColor.opacity(disable() ? 0.53 : 1))
-                        .cornerRadius(50)
-                        .shadow(radius: disable() ? 0 : 6)
-                        .disabled(disable())
-                        Spacer()
+                            NavigationLink(destination: Home()) {
+                                Text("Agora não")
+                                    .font(.custom("Raleway-SemiBold", size: 24))
+                                    .foregroundColor(.blueColor)
+                                    .multilineTextAlignment(.center)
+                                    .padding(7)
+                                //                            Button(action: {
+                                //                                //action agora nao
+                                //                            }, label: {
+                                //                                Text("Agora não")
+                                //                                    .font(.custom("Raleway-SemiBold", size: 24))
+                                //                                    .foregroundColor(.blueColor)
+                                //                                    .multilineTextAlignment(.center)
+                                //                                    .padding(7)
+                                //                            })
+                            }
+                            Spacer().frame(height: 90)
+                        }
                     }
-                    Button(action: {
-                        //action agora nao
-                    }, label: {
-                        Text("Agora não")
-                            .font(.custom("Raleway-SemiBold", size: 24))
-                            .foregroundColor(.blueColor)
-                            .multilineTextAlignment(.center)
-                            .padding(7)
-                    })
-                    Spacer().frame(height: 90)
                 }
+                .padding(.horizontal, 90)
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+                .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+                
             }
+            .navigationTitle("")
+            .navigationBarHidden(true)
         }
-        .padding(.horizontal, 90)
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .leading)
-        .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+        .navigationTitle("")
+        .navigationBarHidden(true)
+        .accentColor(Color.blueColor)
+        .navigationViewStyle(StackNavigationViewStyle())
+
     }
 }
 
