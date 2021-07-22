@@ -220,8 +220,6 @@ struct Canvas: View {
                                 .frame(width: 34, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }).popover(isPresented: $isBackgroundPopoverPresented) {
-                            VStack{
-                                Spacer()
                                 List{
                                     //papel liso
                                     Button(action: {
@@ -241,8 +239,8 @@ struct Canvas: View {
                                     }, label: {
                                         styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
                                     })
-                                }
-                            }.frame(width: 280, height: 280)
+                                }.padding(.top, 34)
+                            .frame(width: 280, height: 280)
                         }
                     }
                 }
@@ -251,7 +249,7 @@ struct Canvas: View {
             .background(
                 Image(backgroundType)
                     .resizable()
-                .edgesIgnoringSafeArea(.all)
+                    .edgesIgnoringSafeArea(.all)
             )
             
         }
