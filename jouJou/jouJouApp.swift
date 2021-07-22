@@ -13,7 +13,11 @@ struct jouJouApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Canvas()
+            //Introduction()
+            //SelectStyle(name: "Evaldo")
+            //Humor()
+            Home()
+            //Calendar()
                 //.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

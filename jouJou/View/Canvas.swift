@@ -42,8 +42,7 @@ struct Canvas: View {
     
     
     var body: some View {
-        NavigationView {
-            // MARK: - How to display
+        ZStack {
             ZStack {
                 //desenhos
                 DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
@@ -275,6 +274,14 @@ struct Canvas: View {
             )
             
         }
+        .onAppear(perform: {
+            
+            self.pencilTapped = false
+        })
+        .onDisappear(perform: {
+            self.pencilTapped = false
+        })
+        .navigationTitle("")
         .navigationViewStyle(StackNavigationViewStyle())
         
     }

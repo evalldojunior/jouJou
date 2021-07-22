@@ -6,4 +6,7 @@
   
 */
 "welcomeText" = "Hello! Welcome to";
+//falta traduzir os seguintes
+"teChame" = "Como você quer que a gente te chame?"; 
+"pronomes" = "Quais são os seus pronomes?";
 
