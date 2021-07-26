@@ -25,7 +25,7 @@ struct Canvas: View {
     //sticker
     @State var isStickerPopoverPresented = false
     @State var StickersGrid = StickersGridView()
-    let stickers = ["heart.circle", "bed.double.fill", "star.fill", "moon.stars.fill", "paperplane.fill", "person.fill", "suit.club.fill", "flag.fill", "smoke.fill", "mappin.circle.fill", "hifispeaker.fill", "photo.fill.on.rectangle.fill", "gift.fill"]
+    let stickers = ["Passaro", "Coracao", "Sol", "Folha", "Rosa", "Jacinto", "Tulipa", "Sakura", "Lavanda"]
     @State var stickersTapped: [String] = []
     @State var conteudo: String = ""
 
@@ -52,7 +52,7 @@ struct Canvas: View {
                 }
                 //stickers
                 ForEach((0..<stickersTapped.count), id: \.self) { k in
-                    ImageView(image: Image(systemName:stickersTapped[k]))
+                    ImageView(image: Image(stickersTapped[k]))
                 }
                 //textos
                 ForEach((0..<text), id: \.self) { _ in
@@ -159,7 +159,9 @@ struct Canvas: View {
                                                 stickersTapped.append(post)
                                                 isStickerPopoverPresented.toggle()
                                             }) {
-                                                Image(systemName: post)
+                                                Image(post)
+                                                    .resizable()
+                                                    .scaledToFit()
                                                     .frame(width: geo.size.width/3, height: geo.size.width/3)
                                             }
                                         }
