@@ -40,6 +40,9 @@ struct Canvas: View {
     @State var isBackgroundPopoverPresented = false
     @State var backgroundType = "Papel-Liso"
     
+    //To-Do list
+    @State var ToDos = 0
+    
     
     var body: some View {
         ZStack {
@@ -69,6 +72,15 @@ struct Canvas: View {
                     }
                     
                 }
+                VStack (spacing: 28){
+                   //To-do List
+                   ForEach((0..<ToDos), id: \.self) { _ in
+                       withAnimation{
+                        ToDoView(titulo: .constant("Passear com doguinho"))
+                       }
+                   }
+                   
+               }
 
             
 
@@ -214,7 +226,7 @@ struct Canvas: View {
                         // MARK: - Tool: checklist
                         
                         Button(action: {
-                            // add checklist action
+                            ToDos += 1
                         }, label: {
                             Image(systemName: "checkmark.square")
                                 .resizable()
