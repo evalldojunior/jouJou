@@ -310,8 +310,8 @@ struct Canvas: View {
                                 }, label: {
                                     styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
                                 })
-                            }.padding(.top, 34)
-                            .frame(width: 280, height: 280)
+                            }//.padding(.top, 20)
+                            .frame(width: 280, height: 245)
                         }
                     }
                 }

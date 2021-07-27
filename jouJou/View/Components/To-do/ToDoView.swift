@@ -21,13 +21,15 @@ struct ToDoView: View {
         if isShowingToDo{
             HStack(spacing: 0){
                 Button(action: {
-                    buttonTapped.toggle()
-                    if buttonTapped{
-                        squareForegroundColor = Color.blueColor
-                        taskForegroundColor = Color.blueColor
-                    }else{
-                        squareForegroundColor = Color.clear
-                        taskForegroundColor = Color(#colorLiteral(red: 0.662745098, green: 0.6588235294, blue: 0.6509803922, alpha: 1))
+                    if titulo != "" {
+                        buttonTapped.toggle()
+                        if buttonTapped{
+                            squareForegroundColor = Color.blueColor
+                            taskForegroundColor = Color.blueColor
+                        }else{
+                            squareForegroundColor = Color.clear
+                            taskForegroundColor = Color(#colorLiteral(red: 0.662745098, green: 0.6588235294, blue: 0.6509803922, alpha: 1))
+                        }
                     }
                 }, label: {
                     RoundedRectangle(cornerRadius: 4)
