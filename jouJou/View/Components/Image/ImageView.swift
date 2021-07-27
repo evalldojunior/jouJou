@@ -82,34 +82,27 @@ struct ImageView: View {
                     self.viewMagnificationState *= value.first ?? 1
                     self.viewRotationState += value.second ?? Angle.zero
                 }
-            ZStack (alignment: .top){
+            ZStack (alignment: .topTrailing){
                 
                 if image != nil {
                     image?
-                        //Image(systemName: "heart")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 200, height: 200)
                     
                 }
                 if buttonIsShowing{
-                HStack{
-                    Spacer()
-                    
-                        Button(action: {
-                            withAnimation{
-                                isShowingImageView = false
-                            }
-                        }, label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 24))
-                                .foregroundColor(Color.blueColor)
-                        })
-                    }.frame(width: 200)
+                    Button(action: {
+                        withAnimation{
+                            isShowingImageView = false
+                        }
+                    }, label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.blueColor)
+                    })
                 }
-                
-                
-            }.frame(width: 202, height: 202)
+            }.frame(width: 200, height: 200)
             .rotationEffect(rotationAngle)
             .scaleEffect(magnificationScale)
             .position(rectPosition)
