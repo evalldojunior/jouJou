@@ -53,6 +53,12 @@ struct QuestionView: View {
                         .background(Color.lightSalmonColor)
                         .cornerRadius(10)
                         .frame(width: 660, height: height2)
+                        .onTapGesture {
+                            dismiss = false
+                            if holdingText == "Eu diria que..." {
+                                holdingText = ""
+                            }
+                        }
                     
                     Text(holdingText)
                         .font(Font.custom("Raleway-Regular", size: 20))

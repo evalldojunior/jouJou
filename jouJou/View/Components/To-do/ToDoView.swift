@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ToDoView: View {
-    @State var titulo: String = "Passear com doguinho"
+    @State var titulo: String = ""
     @State  var isShowingToDo: Bool = true
     @State  var holdingText: String = "Eu diria que..."
     @State var squareForegroundColor = Color.clear

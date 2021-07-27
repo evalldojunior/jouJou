@@ -99,8 +99,10 @@ struct TextView: View {
         VStack(alignment: .center) {
             ZStack{
                 TextEditor(text: $text)
-                    .frame(width: width + 12, height: height + 12)
+                    .frame(width: width + 17, height: height + 17)
                     .fixedSize(horizontal: false, vertical: true)
+                    .font(Font.custom("Raleway-Regular", size: 24))
+                    .foregroundColor(Color.blackColor)
                     .multilineTextAlignment(.center)
                     .rotationEffect(rotationAngle)
                     .scaleEffect(magnificationScale)
@@ -119,17 +121,24 @@ struct TextView: View {
                     .introspectTextView { textView in
                         textView.isScrollEnabled = false
                     }
+                    .onTapGesture {
+                        if self.text == "Clique aqui para adicionar o texto" {
+                            self.text = ""
+                        }
+                    }
                 
                 
                 Text(text)
                     .onDrag {
-                                        NSItemProvider(object: text as NSString)
-                                    }
+                        NSItemProvider(object: text as NSString)
+                    }
                     .background(GeometryReader {
                         Color.clear.preference(key: ViewHeightKey.self, value: $0.frame(in: .local).size.height)
                         Color.clear.preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
                     })
                     .frame(maxWidth: 500)
+                    .font(Font.custom("Raleway-Regular", size: 24))
+                    .foregroundColor(Color.red)
                     .multilineTextAlignment(.center)
                     .opacity(0)
             }
@@ -138,15 +147,15 @@ struct TextView: View {
             
             
         }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-//        .background(Color.black.onTapGesture {
-//            self.endTextEditing()
-//        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
+        //        .background(Color.black.onTapGesture {
+        //            self.endTextEditing()
+        //        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
         .onTapGesture {
             self.endTextEditing()
         }
         .onAppear(perform: {
             if (self.conteudo != ""){
-              text = self.conteudo
+                text = self.conteudo
             }
         })
         
