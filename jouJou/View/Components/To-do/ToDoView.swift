@@ -20,7 +20,7 @@ struct ToDoView: View {
     var body: some View {
         
         if isShowingToDo{
-            HStack{
+            HStack(spacing: 0){
                 Button(action: {
                     buttonTapped.toggle()
                     if buttonTapped{
@@ -36,7 +36,7 @@ struct ToDoView: View {
                         .border(Color.blueColor, width: 2)
                         .frame(width: 30, height: 30)
                         .cornerRadius(4)
-                }).padding()
+                }).padding(.trailing)
                 TextField("Levar cachorro para passear", text: $titulo)
                     .font(Font.custom("Raleway-Regular", size: 24))
                     .foregroundColor(taskForegroundColor)
@@ -50,7 +50,7 @@ struct ToDoView: View {
                         .font(.system(size: 24))
                         .foregroundColor(Color.blueColor)
                 })
-            }.frame(width: 664)
+            }.frame(width: 660)
         }
     }
 }

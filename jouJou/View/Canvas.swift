@@ -43,54 +43,83 @@ struct Canvas: View {
     //To-Do list
     @State var ToDos = 0
     
+    // data
+    var day = "Sexta-feira, 6 de julho de 2021"
+    
     
     var body: some View {
-        ZStack {
-            ZStack {
-                //desenhos
-                DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
-                //imagens
-                ForEach((0..<image.count), id: \.self) { i in
-                    ImageView(image: image[i])
-                }
-                //stickers
-                ForEach((0..<stickersTapped.count), id: \.self) { k in
-                    ImageView(image: Image(stickersTapped[k]))
-                }
-                //textos
-                ForEach((0..<text), id: \.self) { _ in
-                    TextView(conteudo: conteudo)
-                        
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 45) {
                     
-                }
-                 VStack (spacing: 28){
+                    // data
+                    Text(day)
+                        .font(.custom("LibreBaskerville-Regular", size: 30))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                    
+                    //To-do List
+                    VStack(spacing: 28) {
+                        ForEach((0..<ToDos), id: \.self) { _ in
+                            withAnimation{
+                                ToDoView(titulo: .constant("Passear com doguinho"))
+                            }
+                        }
+                        
+                    }
+                    
                     //perguntas
-                    ForEach((0..<questionsTapped.count), id: \.self) { question in
-                        withAnimation{
-                            QuestionView(titulo: $questionsTapped[question])
+                    VStack(spacing: 28) {
+                        ForEach((0..<questionsTapped.count), id: \.self) { question in
+                            withAnimation{
+                                QuestionView(titulo: $questionsTapped[question])
+                            }
                         }
                     }
                     
+                    // canvas
+                    ZStack {
+                        
+                        //desenhos
+                        DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
+                        
+                        //imagens
+                        ForEach((0..<image.count), id: \.self) { i in
+                            ImageView(image: image[i])
+                        }
+                        
+                        //stickers
+                        ForEach((0..<stickersTapped.count), id: \.self) { k in
+                            ImageView(image: Image(stickersTapped[k]))
+                        }
+                        
+                        //textos
+                        ForEach((0..<text), id: \.self) { _ in
+                            TextView(conteudo: conteudo)
+                        }
+                        
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .background(Color.black)
                 }
-                VStack (spacing: 28){
-                   //To-do List
-                   ForEach((0..<ToDos), id: \.self) { _ in
-                       withAnimation{
-                        ToDoView(titulo: .constant("Passear com doguinho"))
-                       }
-                   }
-                   
-               }
-
-            
-
-            }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
+                
+                
+                
+                
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
                 return dropController.receiveDrop(
-                  itemProviders: providers)
-              }
-
+                    itemProviders: providers)
+            }
+            .background(
+                Image(backgroundType)
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+            )
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 29) {
@@ -279,26 +308,19 @@ struct Canvas: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(
-                Image(backgroundType)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-            )
+            .onAppear(perform: {
+                self.pencilTapped = false
+            })
+            .onDisappear(perform: {
+                self.pencilTapped = false
+            })
+            .navigationTitle("")
+            .navigationViewStyle(StackNavigationViewStyle())
             
         }
-        .onAppear(perform: {
-            
-            self.pencilTapped = false
-        })
-        .onDisappear(perform: {
-            self.pencilTapped = false
-        })
-        .navigationTitle("")
-        .navigationViewStyle(StackNavigationViewStyle())
         
     }
+    
     func loadImage() {
         guard let inputImage = inputImage else { return }
         let converted = Image(uiImage: inputImage)

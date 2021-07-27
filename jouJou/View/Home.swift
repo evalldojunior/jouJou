@@ -67,7 +67,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
@@ -108,7 +108,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
@@ -157,7 +157,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
