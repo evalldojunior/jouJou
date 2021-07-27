@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import SwiftUI
 enum SimultaneousState {
     case inactive
@@ -42,6 +41,7 @@ struct TextView: View {
     @GestureState var simultaneousState = SimultaneousState.inactive
     @State var viewRotationState = Angle.zero
     @State var viewMagnificationState = CGFloat(1.0)
+    @Binding var shouldScroll: Bool
     
     var rotationAngle: Angle {
         return viewRotationState + simultaneousState.rotationAngle
@@ -60,14 +60,14 @@ struct TextView: View {
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
     
-    init(conteudo:String){
+    init(shouldScroll: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
         print(conteudo)
         self.conteudo = conteudo
         print(self.conteudo)
-        
+        self._shouldScroll = shouldScroll
     }
     
     var body: some View {
@@ -86,9 +86,11 @@ struct TextView: View {
                 } else {
                     state = .inactive
                 }
+                self.shouldScroll = false
             }.onEnded { value in
                 self.viewMagnificationState *= value.first ?? 1
                 self.viewRotationState += value.second ?? Angle.zero
+                self.shouldScroll = true
             }
         
         
@@ -104,12 +106,19 @@ struct TextView: View {
                     .scaleEffect(magnificationScale)
                     .position(rectPosition)
                     .gesture(
-                        DragGesture()
+                        DragGesture(minimumDistance: 3)
                             .onChanged { value in
                                 self.rectPosition = value.location
+                                self.shouldScroll = false
+                            }
+                            .onEnded { _ in
+                                self.shouldScroll = true
                             }
                     )
                     .gesture(simultaneous)
+                    .introspectTextView { textView in
+                        textView.isScrollEnabled = false
+                    }
                 
                 
                 Text(text)

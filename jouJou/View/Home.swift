@@ -195,7 +195,8 @@ struct Home: View {
                                         }.frame(width: 315, height: 235, alignment: .leading)
                                         .background(Color.greenColor)
                                         .cornerRadius(10)
-                                        .shadow(radius: 6)
+                                        //.shadow(radius: 6)
+                                        .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
                                     }
                                 }
                             }.frame(height: 260)

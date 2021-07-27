@@ -8,8 +8,10 @@
 import Foundation
 import SwiftUI
 import PencilKit
+import Introspect
 
 struct Canvas: View {
+    
     //text
     @State var text = 0
     //image
@@ -18,7 +20,6 @@ struct Canvas: View {
     @State private var inputImage: UIImage?
     @State  var image: [Image] = []
     @State var sourceType: UIImagePickerController.SourceType = .camera
-    @State var numberOfImages = 0
     //drawing
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
@@ -45,6 +46,8 @@ struct Canvas: View {
     
     // data
     var day = "Sexta-feira, 6 de julho de 2021"
+    @State var shouldScroll: Bool = true
+    @State var dismiss = true
     
     
     var body: some View {
@@ -62,7 +65,7 @@ struct Canvas: View {
                     VStack(spacing: 28) {
                         ForEach((0..<ToDos), id: \.self) { _ in
                             withAnimation{
-                                ToDoView(titulo: .constant("Passear com doguinho"))
+                                ToDoView(dismiss: $dismiss)
                             }
                         }
                         
@@ -72,7 +75,7 @@ struct Canvas: View {
                     VStack(spacing: 28) {
                         ForEach((0..<questionsTapped.count), id: \.self) { question in
                             withAnimation{
-                                QuestionView(titulo: $questionsTapped[question])
+                                QuestionView(titulo: $questionsTapped[question], dismiss: $dismiss)
                             }
                         }
                     }
@@ -85,22 +88,22 @@ struct Canvas: View {
                         
                         //imagens
                         ForEach((0..<image.count), id: \.self) { i in
-                            ImageView(image: image[i])
+                            ImageView(image: image[i], shouldScroll: $shouldScroll)
                         }
                         
                         //stickers
                         ForEach((0..<stickersTapped.count), id: \.self) { k in
-                            ImageView(image: Image(stickersTapped[k]))
+                            ImageView(image: Image(stickersTapped[k]), shouldScroll: $shouldScroll)
                         }
                         
                         //textos
                         ForEach((0..<text), id: \.self) { _ in
-                            TextView(conteudo: conteudo)
+                            TextView(shouldScroll: $shouldScroll, conteudo: conteudo)
                         }
                         
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .background(Color.black)
+                    //.background(Color.black)
                 }
                 
                 
@@ -108,6 +111,10 @@ struct Canvas: View {
                 
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
+            .introspectScrollView { scrollView in
+                //scrollView.refreshControl = UIRefreshControl()
+                scrollView.isScrollEnabled = shouldScroll
+            }
             .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
@@ -127,7 +134,6 @@ struct Canvas: View {
                         // MARK: - Tool: image
                         
                         Button(action: {
-                            numberOfImages += 1
                             self.showingImageOptions = true
                         }) {
                             Image(systemName: "photo")
@@ -135,8 +141,12 @@ struct Canvas: View {
                                 .scaledToFit()
                                 .frame(width: 37, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
-                        }    .actionSheet(isPresented: $showingImageOptions, content: {
-                            ActionSheet(title: Text("Titulo"), message: Text("mensagem"), buttons: [
+                        }
+                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                            ImagePicker(image: self.$inputImage, sourceType: sourceType)
+                        }
+                        .actionSheet(isPresented: $showingImageOptions, content: {
+                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
                                 .default(Text("Câmera")) {
                                     sourceType = .camera
                                     showingImagePicker = true
@@ -148,9 +158,7 @@ struct Canvas: View {
                                 .cancel()
                             ])
                         })
-                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                            ImagePicker(image: self.$inputImage, sourceType: sourceType)
-                        }
+                        
                         
                         // MARK: - Tool: song
                         Button(action: {
@@ -307,6 +315,10 @@ struct Canvas: View {
                         }
                     }
                 }
+            }
+            .onTapGesture {
+                self.endTextEditing()
+                self.dismiss = true
             }
             .onAppear(perform: {
                 self.pencilTapped = false

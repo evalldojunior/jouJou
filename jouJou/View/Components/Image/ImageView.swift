@@ -57,6 +57,7 @@ struct ImageView: View {
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
+    @Binding var shouldScroll: Bool
     
     
     var body: some View {
@@ -88,9 +89,13 @@ struct ImageView: View {
                     .scaleEffect(magnificationScale)
                     .position(rectPosition)
                     .gesture(
-                        DragGesture()
+                        DragGesture(minimumDistance: 3)
                             .onChanged { value in
                                 self.rectPosition = value.location
+                                self.shouldScroll = false
+                            }
+                            .onEnded { _ in
+                                self.shouldScroll = true
                             }
                     )
                     .gesture(simultaneous)
@@ -100,8 +105,8 @@ struct ImageView: View {
     }
 }
 
-struct ImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageView()
-    }
-}
+//struct ImageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ImageView()
+//    }
+//}

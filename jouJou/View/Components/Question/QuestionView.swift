@@ -15,10 +15,14 @@ struct QuestionView: View {
     @State var text: String = "Clique aqui para adicionar o texto"
     @State private var height2: CGFloat = .zero
     @State private var width2: CGFloat = .zero
+    //@State var isShowingButton = false
+    @Binding var dismiss: Bool
     
-    init(titulo: Binding<String>){
+    init(titulo: Binding<String>, dismiss: Binding<Bool>){
         self._titulo = titulo
+        self._dismiss = dismiss
         UITextView.appearance().backgroundColor = .clear
+        
     }
     var body: some View {
         if isShowingQuestion{
@@ -26,16 +30,20 @@ struct QuestionView: View {
                 HStack{
                     Text(titulo)
                         .font(Font.custom("Raleway-Regular", size: 24))
+                        .foregroundColor(.blackColor)
                     Spacer()
-                    Button(action: {
-                        withAnimation{
-                            isShowingQuestion = false
-                        }
-                    }, label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.blueColor)
-                    })
+                    
+                    if !dismiss {
+                        Button(action: {
+                            withAnimation{
+                                isShowingQuestion = false
+                            }
+                        }, label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 24))
+                                .foregroundColor(Color.blueColor)
+                        })
+                    }
                 }
                 ZStack (alignment: .topLeading){
                     TextEditor(text: $holdingText)
@@ -58,13 +66,17 @@ struct QuestionView: View {
                 }.onPreferenceChange(ViewHeightKey2.self) { height2 = $0 }
                 
             }.frame(width: 660)
+            .onTapGesture {
+                dismiss = false
+                //isShowingButton = true
+            }
         }
     }
 }
 
 struct QuestionView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionView(titulo: .constant("Como tais se sentindo, mana?"))
+        QuestionView(titulo: .constant("Como tais se sentindo, mana?"), dismiss: .constant(true))
     }
 }
 struct ViewHeightKey2: PreferenceKey {
