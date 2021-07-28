@@ -61,7 +61,7 @@ struct Humor: View {
             GeometryReader { geometry in
                 ZStack{
                     VStack {
-                        Text("Como você está se sentindo?")
+                        Text("comoEsta")
                             .font(.custom("Raleway-Semibold", size: 24))
                             .foregroundColor(Color.blackColor)
                             .multilineTextAlignment(.center)
@@ -108,7 +108,7 @@ struct Humor: View {
                     
                     VStack {
                         Spacer()
-                        Text("Bem-vinde de volta!")
+                        Text("welcomeBack")
                             .font(.custom("LibreBaskerville-Regular", size: 40))
                             .frame(width: 540)
                             .foregroundColor(Color.blackColor)
@@ -132,7 +132,7 @@ struct Humor: View {
                                     }, label: {
                                         HStack {
                                             Spacer()
-                                            Text("Escrever sobre isso")
+                                            Text("escreverBtn")
                                                 .font(.custom("Raleway-SemiBold", size: 24))
                                                 .fontWeight(.semibold)
                                                 .foregroundColor(.beigeColor)
@@ -152,7 +152,7 @@ struct Humor: View {
                             }
                             
                             NavigationLink(destination: Home()) {
-                                Text("Agora não")
+                                Text("agoraNaoBtn")
                                     .font(.custom("Raleway-SemiBold", size: 24))
                                     .foregroundColor(.blueColor)
                                     .multilineTextAlignment(.center)

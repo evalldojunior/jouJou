@@ -7,6 +7,16 @@
 */
 "welcomeText" = "Hello! Welcome to";
 //falta traduzir os seguintes
-"teChame" = "Como você quer que a gente te chame?"; 
-"pronomes" = "Quais são os seus pronomes?";
+"teChame" = "How would you like to be called?";
+"pronomes" = "What are your pronouns?";
+"selectPronomes" = "Select your pronouns";
+"avancarBtn" = "Next";
+"comoEsta" = "How are you?";
+"welcomeBack" = "Welcome Back!";
+"escreverBtn" = "Write about it";
+"agoraNaoBtn" = "Not now";
+"conhecerMelhor" = "Help us to know you better";
+"instrucaoEscrita" = "You can always change the writing form in the settings.";
+"tipoEscrita" = "What type of writing is more like you?";
+
 
