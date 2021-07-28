@@ -59,6 +59,8 @@ struct ImageView: View {
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
     @State var buttonIsShowing = false
+    @Binding var shouldScroll: Bool
+
     
     
     var body: some View {
@@ -82,6 +84,7 @@ struct ImageView: View {
                     self.viewMagnificationState *= value.first ?? 1
                     self.viewRotationState += value.second ?? Angle.zero
                 }
+
             ZStack (alignment: .topTrailing){
                 
                 if image != nil {
@@ -107,9 +110,13 @@ struct ImageView: View {
             .scaleEffect(magnificationScale)
             .position(rectPosition)
             .gesture(
-                DragGesture()
+                DragGesture(minimumDistance: 3)
                     .onChanged { value in
                         self.rectPosition = value.location
+                        self.shouldScroll = false
+                    }
+                    .onEnded { _ in
+                        self.shouldScroll = true
                     }
             )
             .gesture(simultaneous)
@@ -120,8 +127,8 @@ struct ImageView: View {
     }
 }
 
-struct ImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageView()
-    }
-}
+//struct ImageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ImageView()
+//    }
+//}

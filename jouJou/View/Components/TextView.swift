@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import SwiftUI
 enum SimultaneousState {
     case inactive
@@ -43,7 +42,8 @@ struct TextView: View {
     @State var viewRotationState = Angle.zero
     @State var viewMagnificationState = CGFloat(1.0)
     @State var isShowingTextView = true
-    
+    @Binding var shouldScroll: Bool
+
     
     var rotationAngle: Angle {
         return viewRotationState + simultaneousState.rotationAngle
@@ -64,14 +64,14 @@ struct TextView: View {
     @State var buttonIsShowing = false
     
     
-    init(conteudo:String){
+    init(shouldScroll: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
         print(conteudo)
         self.conteudo = conteudo
         print(self.conteudo)
-        
+        self._shouldScroll = shouldScroll
     }
     
     var body: some View {
@@ -91,21 +91,29 @@ struct TextView: View {
                     } else {
                         state = .inactive
                     }
+                    self.shouldScroll = false
                 }.onEnded { value in
                     self.viewMagnificationState *= value.first ?? 1
                     self.viewRotationState += value.second ?? Angle.zero
+                    self.shouldScroll = true
                 }
-            
-            
-            
-            
-            VStack(alignment: .center) {
-                
+
+            VStack(alignment: .center) {             
                 ZStack (alignment: .top){
                     TextEditor(text: $text)
-                        .frame(width: width + 12, height: height + 12)
+                        .frame(width: width + 17, height: height + 17)
                         .fixedSize(horizontal: false, vertical: true)
+                        .font(Font.custom("Raleway-Regular", size: 24))
+                        .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
+                        .introspectTextView { textView in
+                            textView.isScrollEnabled = false
+                        }
+                        .onTapGesture {
+                            if self.text == "Clique aqui para adicionar o texto" {
+                                self.text = ""
+                            }
+                        }
                         
                     
                     
@@ -118,6 +126,8 @@ struct TextView: View {
                             Color.clear.preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
                         })
                         .frame(maxWidth: 500)
+                        .font(Font.custom("Raleway-Regular", size: 24))
+                        .foregroundColor(Color.red)
                         .multilineTextAlignment(.center)
                         .opacity(0)
                     
@@ -140,15 +150,18 @@ struct TextView: View {
                 .scaleEffect(magnificationScale)
                 .position(rectPosition)
                 .gesture(
-                    DragGesture()
+                    DragGesture(minimumDistance: 3)
                         .onChanged { value in
                             self.rectPosition = value.location
+                            self.shouldScroll = false
+                        }
+                        .onEnded { _ in
+                            self.shouldScroll = true
                         }
                 )
                 .gesture(simultaneous)
                 .onPreferenceChange(ViewHeightKey.self) { height = $0 }
                 .onPreferenceChange(ViewWidthKey.self) { width = $0 }
-                
                 
             }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             //        .background(Color.black.onTapGesture {
@@ -157,6 +170,7 @@ struct TextView: View {
             .onTapGesture {
                 self.endTextEditing()
                 buttonIsShowing.toggle()
+
             }
             .onAppear(perform: {
                 if (self.conteudo != ""){
@@ -164,6 +178,7 @@ struct TextView: View {
                 }
             })
             
+
         }
     }
 }
