@@ -110,6 +110,9 @@ struct TextView: View {
                             textView.isScrollEnabled = false
                         }
                         .onTapGesture {
+                            withAnimation{
+                                buttonIsShowing = true
+                            }
                             if self.text == "Clique aqui para adicionar o texto" {
                                 self.text = ""
                             }
@@ -167,9 +170,10 @@ struct TextView: View {
             //        .background(Color.black.onTapGesture {
             //            self.endTextEditing()
             //        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
+            .background(Color.beigeColor.opacity(0.000001)) //por algum motivo, resolvi o bug colocando background
             .onTapGesture {
+                buttonIsShowing = false
                 self.endTextEditing()
-                buttonIsShowing.toggle()
 
             }
             .onAppear(perform: {
