@@ -71,6 +71,7 @@ struct SelectStyle: View {
                                     withAnimation(){
                                         isSelected = index
                                     }
+                                    UserDefaults.standard.setValue(self.selectedStyle, forKey: "Estilo")
                                 }, label: {
                                     VStack(alignment:.center, spacing: 0){
                                         Image("\(ImageStyles[index])")
@@ -105,6 +106,7 @@ struct SelectStyle: View {
                         .font(.custom("Raleway-Regular", size: 20))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
+                    
                     
                 }
                 
