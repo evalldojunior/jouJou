@@ -41,6 +41,7 @@
 		6F012EA226A5F8370033C1B7 /* ContentDropController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F012EA126A5F8370033C1B7 /* ContentDropController.swift */; };
 		6F012EED26AA0E950033C1B7 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 6F012EEC26AA0E950033C1B7 /* FSCalendar */; };
 		6F012EEF26AA0EAB0033C1B7 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F012EEE26AA0EAB0033C1B7 /* Calendar.swift */; };
+		6FC6A5DA26B1E583008C6BD6 /* CanvasEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC6A5D926B1E583008C6BD6 /* CanvasEditor.swift */; };
 		6FF7AEE52694ED6B0079874A /* jouJouApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF7AEE42694ED6B0079874A /* jouJouApp.swift */; };
 		6FF7AEE72694ED6B0079874A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF7AEE62694ED6B0079874A /* ContentView.swift */; };
 		6FF7AEE92694ED6E0079874A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FF7AEE82694ED6E0079874A /* Assets.xcassets */; };
@@ -111,6 +112,7 @@
 		6F012E3D269CD7570033C1B7 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6F012EA126A5F8370033C1B7 /* ContentDropController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDropController.swift; sourceTree = "<group>"; };
 		6F012EEE26AA0EAB0033C1B7 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		6FC6A5D926B1E583008C6BD6 /* CanvasEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasEditor.swift; sourceTree = "<group>"; };
 		6FF7AEE12694ED6B0079874A /* jouJou.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = jouJou.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF7AEE42694ED6B0079874A /* jouJouApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = jouJouApp.swift; sourceTree = "<group>"; };
 		6FF7AEE62694ED6B0079874A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				08D3E56826A5EA7C00438A1C /* Humor.swift */,
 				08D3E56A26A6066700438A1C /* Home.swift */,
 				08008D7B26A0B6F2003F9101 /* SelectStyle.swift */,
+				6FC6A5D926B1E583008C6BD6 /* CanvasEditor.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -526,6 +529,7 @@
 				6FF7AEE52694ED6B0079874A /* jouJouApp.swift in Sources */,
 				A85CDA3126A5F4A800A08BB1 /* QuestionView.swift in Sources */,
 				A8F3E40F26A0AFEC009C3683 /* StickersGridView.swift in Sources */,
+				6FC6A5DA26B1E583008C6BD6 /* CanvasEditor.swift in Sources */,
 				A862F101269E31A000D903B1 /* ImagePicker.swift in Sources */,
 				6FF7AEF12694ED6E0079874A /* jouJou.xcdatamodeld in Sources */,
 				6F012EEF26AA0EAB0033C1B7 /* Calendar.swift in Sources */,
