@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Humor: View {
+    
     @State var isSelected = -1
     @State var selectedMood = ""
     @State private var isPresented = false
@@ -56,6 +57,10 @@ struct Humor: View {
         }
     }
     
+    init() {
+        UINavigationBar.appearance().backgroundColor = UIColor(.beigeColor.opacity(0.0001))
+        UINavigationBar.appearance().barTintColor = UIColor(.beigeColor)
+    }
     var body: some View {
         NavigationView {
             GeometryReader { geometry in

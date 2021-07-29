@@ -29,8 +29,8 @@ struct Canvas: View {
     let stickers = ["Passaro", "Coracao", "Sol", "Folha", "Rosa", "Jacinto", "Tulipa", "Sakura", "Lavanda"]
     @State var stickersTapped: [String] = []
     @State var conteudo: String = ""
-
-
+    
+    
     //question
     @State var questionTitle = ""
     @State var isQuestionPopoverPresented = false
@@ -105,7 +105,7 @@ struct Canvas: View {
                     .frame(width: geometry.size.width, height: geometry.size.height)
                     //.background(Color.black)
                 }
-                
+                .background(BackgroundCanvas(type: backgroundType).edgesIgnoringSafeArea(.all))
                 
                 
                 
@@ -121,12 +121,13 @@ struct Canvas: View {
                 return dropController.receiveDrop(
                     itemProviders: providers)
             }
-            .background(
-                Image(backgroundType)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-            )
+            .background(BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all))
+            //            .background(
+            //                Image(backgroundType)
+            //                    .resizable()
+            //                    .scaledToFill()
+            //                    .edgesIgnoringSafeArea(.all)
+            //            )
             .toolbar{
                 ToolbarItem(placement: .principal) {
                     HStack(spacing: 29) {
@@ -328,6 +329,14 @@ struct Canvas: View {
             })
             .navigationTitle("")
             .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarItems(trailing:
+                                    Button(action: {
+                                        
+                                    }) {
+                                        Text("Finalizar")
+                                            
+                                    }
+            )
             
         }
         
