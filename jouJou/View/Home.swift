@@ -256,18 +256,4 @@ struct Home: View {
     }
 }
 
-struct Home_Previews: PreviewProvider {
-    static var previews: some View {
-        Home()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (2nd generation)"))
-        
-        Home()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (5th generation)"))
-        
-        Home()
-            .previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
-        
-        Home()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (9.7-inch)"))
-    }
-}
+

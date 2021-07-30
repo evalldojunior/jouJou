@@ -13,11 +13,20 @@ import FSCalendar
 
 struct Calendar: View {
     @State var selectedDate:Date = Date()
+    @State var selection:Bool = false
 
     var body: some View {
+        ZStack{
+            CalendarRepresentable(selectedDate: $selectedDate, selection: $selection)
+                .background(Color.beigeColor)
+            NavigationLink(
+                destination: CanvasEditor(selectedDate: $selectedDate),
+                isActive: $selection,
+                label: {
+                })
+        }
         
-        CalendarRepresentable(selectedDate: $selectedDate)
-            .background(Color.beigeColor)
+       
     }
 }
 
@@ -25,6 +34,7 @@ struct CalendarRepresentable:UIViewRepresentable{
     typealias UIViewType = FSCalendar
     var calendar = FSCalendar()
     @Binding var selectedDate: Date
+    @Binding var selection:Bool
     
     func updateUIView(_ uiView: FSCalendar, context: Context) {
         
@@ -42,7 +52,7 @@ struct CalendarRepresentable:UIViewRepresentable{
         calendar.appearance.weekdayTextColor = UIColor(.darkSalmonColor)
         calendar.appearance.titleFont = UIFont(name: "Raleway-Bold", size: 24)
         calendar.appearance.selectionColor = UIColor(.darkSalmonColor)
-       
+        calendar.appearance.headerMinimumDissolvedAlpha = 0
         return calendar
     }
     
@@ -55,11 +65,33 @@ struct CalendarRepresentable:UIViewRepresentable{
         
         init(_ parent: CalendarRepresentable){
             self.parent = parent
+            self.parent.calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "CELL")
         }
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             parent.selectedDate = date
+            print(String(parent.selectedDate.description))
+            parent.selection.toggle()
+            
+            
+            //ir para a pagina do dia
         }
+        func calendar(_ calendar: FSCalendar, cellFor date: Date, at position: FSCalendarMonthPosition) -> FSCalendarCell {
+            let cell = calendar.dequeueReusableCell(withIdentifier: "CELL", for: date, at: position)
+            cell.imageView.contentMode = .scaleAspectFit
+            cell.imageView.tintColor = .black
+            //customizar célula de cada data
+            
+            return cell
+        }
+//        func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+//            return 1
+//        }
+//        func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
+//            //retorna uma imagem para uma célula
+//            return UIImage(systemName: "pencil.circle")
+//        }
+       
     }
     
     

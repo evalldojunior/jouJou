@@ -189,18 +189,3 @@ struct Humor: View {
     }
 }
 
-struct Humor_Previews: PreviewProvider {
-    static var previews: some View {
-        Humor()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (2nd generation)"))
-        
-        Humor()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (12.9-inch) (5th generation)"))
-        
-        Humor()
-            .previewDevice(PreviewDevice(rawValue: "iPad Air (4th generation)"))
-        
-        Humor()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (9.7-inch)"))
-    }
-}
