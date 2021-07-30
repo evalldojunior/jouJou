@@ -109,7 +109,7 @@ struct SelectStyle: View {
                 
                 VStack {
                     Spacer()
-                    Text("Nos ajude a te conhecer melhor, \(name)")
+                    Text("conhecerMelhor \(name)")
                         .font(.custom("LibreBaskerville-Regular", size: 40))
                         .frame(width: 540)
                         .foregroundColor(Color.blackColor)

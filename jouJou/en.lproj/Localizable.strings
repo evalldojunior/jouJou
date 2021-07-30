@@ -15,8 +15,16 @@
 "welcomeBack" = "Welcome Back!";
 "escreverBtn" = "Write about it";
 "agoraNaoBtn" = "Not now";
-"conhecerMelhor" = "Help us to know you better";
+"conhecerMelhor %@" = "Help us to know you better, %@";
 "instrucaoEscrita" = "You can always change the writing form in the settings.";
 "tipoEscrita" = "What type of writing is more like you?";
+"algumasFotos %@" = "Some pictures of %@";
+"algumasMusicas %@" = "Some songs of %@";
+"escritasRecentes" = "Your most recent writings";
+"%@ mesAnimado" = "%@ is being a lively month";
+
+
+
+
 
 
