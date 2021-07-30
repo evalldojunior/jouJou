@@ -14,7 +14,7 @@ struct SelectStyle: View {
     
     var name: String!
     var styles: [String] = ["Objetiva", "Livre", "Bullet"]
-    var ImageStyles: [String] = ["exemplo", "exemplo", "exemplo"]
+    var ImageStyles: [String] = ["objetivo", "livre", "bullet"]
     
     init(name: String) {
         self.name = name
@@ -77,14 +77,14 @@ struct SelectStyle: View {
                                         Image("\(ImageStyles[index])")
                                             .resizable()
                                             .scaledToFit()
-                                            .padding(5)
+                                            .padding(ipad13inch() ? 25 : 15)
                                         HStack {
                                             Spacer()
                                             Text("\(styles[index])")
                                                 .font(.custom("Raleway-Bold", size: 20))
                                                 .foregroundColor(.beigeColor)
                                                 .multilineTextAlignment(.center)
-                                                .padding(7)
+                                                .padding(.bottom, 7)
                                             Spacer()
                                         }
                                     }.padding(5)

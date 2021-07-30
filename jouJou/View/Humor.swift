@@ -15,7 +15,7 @@ struct Humor: View {
     @State private var isPresented = false
     
     var moods: [String] = ["Animade!", "Tranquile", "OK", "Ansiose", "Estressade", "Para Baixo"]
-    var ImageMoods: [String] = ["exemplo", "exemplo", "exemplo", "exemplo", "exemplo", "exemplo"]
+    var ImageMoods: [String] = ["animade", "tranquile", "ok", "ansiose", "estressade", "parabaixo"]
     var colorMoods: [Color] = [Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor] // mudar para as cores corretas depois
     
     var collums = [
@@ -74,7 +74,7 @@ struct Humor: View {
                         Spacer().frame(height: 60)
                         
                         VStack{
-                            LazyVGrid(columns: collums, alignment: .center, spacing: 30) {
+                            LazyVGrid(columns: collums, alignment: .center, spacing: ipad10inch() ? 30 : 50) {
                                 ForEach(0..<moods.count, id: \.self) { index in
                                     VStack {
                                         Button(action: {
@@ -88,23 +88,19 @@ struct Humor: View {
                                                     .resizable()
                                                     .scaledToFit()
                                                     .padding(10)
+                                                Text("\(moods[index])")
+                                                    .font(.custom("Raleway-Bold", size: 20))
+                                                    .foregroundColor(.beigeColor)
+                                                    .multilineTextAlignment(.center)
+                                                    .padding(7)
                                             }.padding(5)
-                                        }).frame(width: ipad13inch() ? 220 : 170 , height: ipad13inch() ? 220 : 170)
+                                        }).frame(width: ipad13inch() ? 220 : 170 , height: ipad13inch() ? 240 : 190)
                                         .clipped()
                                         .background(selected(index: index) ? Color.orangeColor : colorMoods[index])
                                         .cornerRadius(10)
                                         //.shadow(radius: 6)
                                         .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
                                         
-                                        HStack {
-                                            Spacer()
-                                            Text("\(moods[index])")
-                                                .font(.custom("Raleway-Regular", size: 20))
-                                                .foregroundColor(.blackColor)
-                                                .multilineTextAlignment(.center)
-                                                .padding(7)
-                                            Spacer()
-                                        }
                                     }
                                 }
                             }
