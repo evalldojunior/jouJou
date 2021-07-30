@@ -47,7 +47,7 @@ struct ImageTestView: View {
                 Spacer()
             }
             ForEach((0..<image.count), id: \.self) { i in
-                ImageView(image: image[i])
+                ImageView(image: image[i], shouldScroll: .constant(true))
             }
         }
         

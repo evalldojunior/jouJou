@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		08008D7A26A0AE2A003F9101 /* libre-baskerville.bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08008D7926A0AE2A003F9101 /* libre-baskerville.bold.ttf */; };
 		08008D7C26A0B6F2003F9101 /* SelectStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08008D7B26A0B6F2003F9101 /* SelectStyle.swift */; };
+		0829908926B09E7700012EC9 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 0829908826B09E7700012EC9 /* Introspect */; };
 		08349FF7269F81860050348B /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08349FF6269F81860050348B /* Introduction.swift */; };
+		0856D20126B2569700CE1BB1 /* BackgroundCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0856D20026B2569700CE1BB1 /* BackgroundCanvas.swift */; };
 		08D3E56926A5EA7C00438A1C /* Humor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E56826A5EA7C00438A1C /* Humor.swift */; };
 		08D3E56B26A6066700438A1C /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E56A26A6066700438A1C /* Home.swift */; };
 		08DAEB77269E15AF00B05EB6 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DAEB76269E15AF00B05EB6 /* Colors.swift */; };
@@ -81,6 +83,7 @@
 		08008D7926A0AE2A003F9101 /* libre-baskerville.bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "libre-baskerville.bold.ttf"; sourceTree = "<group>"; };
 		08008D7B26A0B6F2003F9101 /* SelectStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStyle.swift; sourceTree = "<group>"; };
 		08349FF6269F81860050348B /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
+		0856D20026B2569700CE1BB1 /* BackgroundCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCanvas.swift; sourceTree = "<group>"; };
 		08D3E56826A5EA7C00438A1C /* Humor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Humor.swift; sourceTree = "<group>"; };
 		08D3E56A26A6066700438A1C /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		08DAEB76269E15AF00B05EB6 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F012EED26AA0E950033C1B7 /* FSCalendar in Frameworks */,
+				0829908926B09E7700012EC9 /* Introspect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				A8469E5B26A9F12C0046E320 /* styleRow.swift */,
+				0856D20026B2569700CE1BB1 /* BackgroundCanvas.swift */,
 			);
 			path = Background;
 			sourceTree = "<group>";
@@ -371,6 +376,7 @@
 			name = jouJou;
 			packageProductDependencies = (
 				6F012EEC26AA0E950033C1B7 /* FSCalendar */,
+				0829908826B09E7700012EC9 /* Introspect */,
 			);
 			productName = jouJou;
 			productReference = 6FF7AEE12694ED6B0079874A /* jouJou.app */;
@@ -446,6 +452,7 @@
 			mainGroup = 6FF7AED82694ED6B0079874A;
 			packageReferences = (
 				6F012EEB26AA0E950033C1B7 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				0829908726B09E7700012EC9 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 6FF7AEE22694ED6B0079874A /* Products */;
 			projectDirPath = "";
@@ -530,6 +537,7 @@
 				A85CDA3126A5F4A800A08BB1 /* QuestionView.swift in Sources */,
 				A8F3E40F26A0AFEC009C3683 /* StickersGridView.swift in Sources */,
 				6FC6A5DA26B1E583008C6BD6 /* CanvasEditor.swift in Sources */,
+				0856D20126B2569700CE1BB1 /* BackgroundCanvas.swift in Sources */,
 				A862F101269E31A000D903B1 /* ImagePicker.swift in Sources */,
 				6FF7AEF12694ED6E0079874A /* jouJou.xcdatamodeld in Sources */,
 				6F012EEF26AA0EAB0033C1B7 /* Calendar.swift in Sources */,
@@ -707,6 +715,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"jouJou/Preview Content\"";
+				DEVELOPMENT_TEAM = SJND557DN4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = jouJou/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -728,6 +737,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"jouJou/Preview Content\"";
+				DEVELOPMENT_TEAM = SJND557DN4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = jouJou/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -864,6 +874,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0829908726B09E7700012EC9 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.3;
+			};
+		};
 		6F012EEB26AA0E950033C1B7 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar.git";
@@ -875,6 +893,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0829908826B09E7700012EC9 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0829908726B09E7700012EC9 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
 		6F012EEC26AA0E950033C1B7 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6F012EEB26AA0E950033C1B7 /* XCRemoteSwiftPackageReference "FSCalendar" */;

@@ -84,6 +84,8 @@ struct Introduction: View {
                                 withAnimation {
                                     isExpanded.toggle()
                                 }
+                                UserDefaults.standard.set(self.name, forKey: "Nome")
+                                UserDefaults.standard.set(self.selectedPronoun, forKey: "Pronomes")
                             }
                         }
                         .padding()
@@ -125,7 +127,7 @@ struct Introduction: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                NavigationLink(destination: SelectStyle(name: name)) {
+                                NavigationLink(destination: SelectStyle(name: UserDefaults.standard.string(forKey: "Nome") ?? name)) {
                                     Button(action: {
                                         //action
                                     }, label: {
