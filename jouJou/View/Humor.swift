@@ -87,7 +87,7 @@ struct Humor: View {
                                                 Image("\(ImageMoods[index])")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .padding(10)
+                                                    .padding(3)
                                                 Text("\(moods[index])")
                                                     .font(.custom("Raleway-Bold", size: 20))
                                                     .foregroundColor(.beigeColor)
