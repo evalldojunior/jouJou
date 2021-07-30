@@ -58,7 +58,7 @@ struct Humor: View {
     }
     
     init() {
-        UINavigationBar.appearance().backgroundColor = UIColor(.beigeColor.opacity(0.0001))
+        UINavigationBar.appearance().backgroundColor = UIColor(Color.beigeColor.opacity(0.0001))
         UINavigationBar.appearance().barTintColor = UIColor(.beigeColor)
     }
     var body: some View {
