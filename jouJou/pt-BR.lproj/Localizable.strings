@@ -10,4 +10,18 @@
 "welcomeText" = "Olá! Bem vindo ao";
 "teChame" = "Como você quer que a gente te chame?";
 "pronomes" = "Quais são os seus pronomes?";
+"avancarBtn" = "Avançar";
+"selectPronomes" = "Selecione seu pronome";
+"comoEsta" = "Como você está se sentindo?";
+"welcomeBack" = "Bem-vinde de volta!";
+"escreverBtn" = "Escrever sobre isso";
+"agoraNaoBtn" = "Agora não";
+"conhecerMelhor %@" = "Nos ajude a te conhecer melhor, %@";
+"instrucaoEscrita" = "Você pode sempre alterar a forma de escrita nas configurações.";
+"tipoEscrita" = "Qual tipo de escrita é mais a sua cara?";
+"algumasFotos %@" = "Algumas fotos de %@";
+"algumasMusicas %@" = "Algumas músicas de %@";
+"escritasRecentes" = "Suas escritas mais recentes";
+"%@ mesAnimado" = "%@ está sendo um mês animado";
+
 

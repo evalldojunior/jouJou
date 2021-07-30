@@ -100,7 +100,7 @@ struct Introduction: View {
                         /// logo
                         Spacer()//.frame(height: 150)
                         VStack {
-                            Text("Olá! Bem-vinde ao")
+                            Text("welcomeText")
                                 .font(.custom("LibreBaskerville-Regular", size: 30))
                             HStack(alignment: .center, spacing: -15){
                                 Spacer()
@@ -133,7 +133,7 @@ struct Introduction: View {
                                     }, label: {
                                         HStack {
                                             Spacer()
-                                            Text("Avançar")
+                                            Text("avancarBtn")
                                                 .font(.custom("Raleway-SemiBold", size: 24))
                                                 .fontWeight(.semibold)
                                                 .foregroundColor(.beigeColor)

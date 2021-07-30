@@ -10,6 +10,9 @@ import SwiftUI
 
 struct Home: View {
     
+    //temporárias
+    var mes:String = "Julho"
+    
     // resumo do mes
     @State var title: String = "Julho está sendo um mês animado!"
     @State var text: String = "Algum textinho fofo pra pessoa <3 pipipopopopipijncsjnsjnlalalala parabens continue assim, estamos felizes por vc!!"
@@ -38,7 +41,7 @@ struct Home: View {
                         /// resumo do mes
                         HStack {
                             VStack(alignment: .leading, spacing: 7){
-                                Text(title)
+                                Text("\(mes) mesAnimado")
                                     .font(.custom("Raleway-Bold", size: 30))
                                     .foregroundColor(.blackColor)
                                     .multilineTextAlignment(.leading)
@@ -60,7 +63,7 @@ struct Home: View {
                         
                         /// fotos do mes
                         VStack(alignment: .leading){
-                            Text("Algumas fotos de julho")
+                            Text("algumasFotos \(mes)")
                                 .font(.custom("Raleway-Bold", size: 24))
                                 .foregroundColor(.blackColor)
                                 .multilineTextAlignment(.leading)
@@ -101,7 +104,7 @@ struct Home: View {
                         
                         /// musicas do mes
                         VStack(alignment: .leading){
-                            Text("Algumas músicas marcantes de julho")
+                            Text("algumasMusicas \(mes)")
                                 .font(.custom("Raleway-Bold", size: 24))
                                 .foregroundColor(.blackColor)
                                 .multilineTextAlignment(.leading)
@@ -150,7 +153,7 @@ struct Home: View {
                         
                         /// escritas mais recentes
                         VStack(alignment: .leading){
-                            Text("Suas escritas mais recentes")
+                            Text("escritasRecentes")
                                 .font(.custom("Raleway-Bold", size: 24))
                                 .foregroundColor(.blackColor)
                                 .multilineTextAlignment(.leading)

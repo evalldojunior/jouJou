@@ -55,7 +55,7 @@ struct SelectStyle: View {
         GeometryReader{ geometry in
             ZStack{
                 VStack {
-                    Text("Qual tipo de escrita é mais a sua cara?")
+                    Text("tipoEscrita")
                         .font(.custom("Raleway-Semibold", size: 24))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
@@ -102,7 +102,7 @@ struct SelectStyle: View {
                     
                     Spacer().frame(height: 95)
                     
-                    Text("Você pode sempre alterar a forma de escrita nas configurações.")
+                    Text("instrucaoEscrita")
                         .font(.custom("Raleway-Regular", size: 20))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
@@ -112,7 +112,7 @@ struct SelectStyle: View {
                 
                 VStack {
                     Spacer()
-                    Text("Nos ajude a te conhecer melhor, \(name)!")
+                    Text("conhecerMelhor \(name)")
                         .font(.custom("LibreBaskerville-Regular", size: 40))
                         .frame(width: 540)
                         .foregroundColor(Color.blackColor)
@@ -135,7 +135,7 @@ struct SelectStyle: View {
                                 }, label: {
                                     HStack {
                                         Spacer()
-                                        Text("Avançar")
+                                        Text("avancarBtn")
                                             .font(.custom("Raleway-SemiBold", size: 24))
                                             .fontWeight(.semibold)
                                             .foregroundColor(.beigeColor)
