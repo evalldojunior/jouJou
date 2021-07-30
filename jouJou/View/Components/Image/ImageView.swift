@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ImageView: View {
     var image: Image?
+    @State var isShowingImageView = true
     
     enum SimultaneousState {
         case inactive
@@ -57,51 +58,77 @@ struct ImageView: View {
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
+    @State var buttonIsShowing = false
+    @Binding var shouldScroll: Bool
+
     
     
     var body: some View {
-        let magnificationGesture = MagnificationGesture()
-        
-        let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 5))
-        
-        let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
-            .updating($simultaneousState) { value, state, transation in
-                if value.first != nil && value.second != nil {
-                    state = .both(angle: value.second!, scale: value.first!)
-                } else if value.first != nil {
-                    state = .zooming(scale: value.first!)
-                } else if value.second != nil {
-                    state = .rotating(angle: value.second!)
-                } else {
-                    state = .inactive
-                }
-            }.onEnded { value in
-                self.viewMagnificationState *= value.first ?? 1
-                self.viewRotationState += value.second ?? Angle.zero
-            }
-        ZStack{
-            if image != nil {
-                image?
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                    .rotationEffect(rotationAngle)
-                    .scaleEffect(magnificationScale)
-                    .position(rectPosition)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                self.rectPosition = value.location
-                            }
-                    )
-                    .gesture(simultaneous)
-            }
+        if isShowingImageView{
+            let magnificationGesture = MagnificationGesture()
             
+            let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 5))
+            
+            let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
+                .updating($simultaneousState) { value, state, transation in
+                    if value.first != nil && value.second != nil {
+                        state = .both(angle: value.second!, scale: value.first!)
+                    } else if value.first != nil {
+                        state = .zooming(scale: value.first!)
+                    } else if value.second != nil {
+                        state = .rotating(angle: value.second!)
+                    } else {
+                        state = .inactive
+                    }
+                }.onEnded { value in
+                    self.viewMagnificationState *= value.first ?? 1
+                    self.viewRotationState += value.second ?? Angle.zero
+                }
+
+            ZStack (alignment: .topTrailing){
+                
+                if image != nil {
+                    image?
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                    
+                }
+                if buttonIsShowing{
+                    Button(action: {
+                        withAnimation{
+                            isShowingImageView = false
+                        }
+                    }, label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.blueColor)
+                    })
+                }
+            }.frame(width: 200, height: 200)
+            .rotationEffect(rotationAngle)
+            .scaleEffect(magnificationScale)
+            .position(rectPosition)
+            .gesture(
+                DragGesture(minimumDistance: 3)
+                    .onChanged { value in
+                        self.rectPosition = value.location
+                        self.shouldScroll = false
+                    }
+                    .onEnded { _ in
+                        self.shouldScroll = true
+                    }
+            )
+            .gesture(simultaneous)
+            .onTapGesture {
+                buttonIsShowing.toggle()
+            }
         }
     }
 }
 
-struct ImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageView()
-    }
-}
+//struct ImageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ImageView()
+//    }
+//}

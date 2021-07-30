@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import SwiftUI
 enum SimultaneousState {
     case inactive
@@ -42,6 +41,9 @@ struct TextView: View {
     @GestureState var simultaneousState = SimultaneousState.inactive
     @State var viewRotationState = Angle.zero
     @State var viewMagnificationState = CGFloat(1.0)
+    @State var isShowingTextView = true
+    @Binding var shouldScroll: Bool
+
     
     var rotationAngle: Angle {
         return viewRotationState + simultaneousState.rotationAngle
@@ -59,88 +61,129 @@ struct TextView: View {
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
+    @State var buttonIsShowing = false
     
-    init(conteudo:String){
+    
+    init(shouldScroll: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
         print(conteudo)
         self.conteudo = conteudo
         print(self.conteudo)
-        
+        self._shouldScroll = shouldScroll
     }
     
     var body: some View {
-        let magnificationGesture = MagnificationGesture()
-        
-        let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 5))
-        
-        let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
-            .updating($simultaneousState) { value, state, transation in
-                if value.first != nil && value.second != nil {
-                    state = .both(angle: value.second!, scale: value.first!)
-                } else if value.first != nil {
-                    state = .zooming(scale: value.first!)
-                } else if value.second != nil {
-                    state = .rotating(angle: value.second!)
-                } else {
-                    state = .inactive
+        if isShowingTextView {
+            let magnificationGesture = MagnificationGesture()
+            
+            let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 5))
+            
+            let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
+                .updating($simultaneousState) { value, state, transation in
+                    if value.first != nil && value.second != nil {
+                        state = .both(angle: value.second!, scale: value.first!)
+                    } else if value.first != nil {
+                        state = .zooming(scale: value.first!)
+                    } else if value.second != nil {
+                        state = .rotating(angle: value.second!)
+                    } else {
+                        state = .inactive
+                    }
+                    self.shouldScroll = false
+                }.onEnded { value in
+                    self.viewMagnificationState *= value.first ?? 1
+                    self.viewRotationState += value.second ?? Angle.zero
+                    self.shouldScroll = true
                 }
-            }.onEnded { value in
-                self.viewMagnificationState *= value.first ?? 1
-                self.viewRotationState += value.second ?? Angle.zero
-            }
-        
-        
-        
-        
-        VStack(alignment: .center) {
-            ZStack{
-                TextEditor(text: $text)
-                    .frame(width: width + 12, height: height + 12)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.center)
-                    .rotationEffect(rotationAngle)
-                    .scaleEffect(magnificationScale)
-                    .position(rectPosition)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                self.rectPosition = value.location
+
+            VStack(alignment: .center) {             
+                ZStack (alignment: .top){
+                    TextEditor(text: $text)
+                        .frame(width: width + 17, height: height + 17)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(Font.custom("Raleway-Regular", size: 24))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                        .introspectTextView { textView in
+                            textView.isScrollEnabled = false
+                        }
+                        .onTapGesture {
+                            withAnimation{
+                                buttonIsShowing = true
                             }
-                    )
-                    .gesture(simultaneous)
+                            if self.text == "Clique aqui para adicionar o texto" {
+                                self.text = ""
+                            }
+                        }
+                        
+                    
+                    
+                    Text(text)
+                        .onDrag {
+                            NSItemProvider(object: text as NSString)
+                        }
+                        .background(GeometryReader {
+                            Color.clear.preference(key: ViewHeightKey.self, value: $0.frame(in: .local).size.height)
+                            Color.clear.preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
+                        })
+                        .frame(maxWidth: 500)
+                        .font(Font.custom("Raleway-Regular", size: 24))
+                        .foregroundColor(Color.red)
+                        .multilineTextAlignment(.center)
+                        .opacity(0)
+                    
+                    HStack{
+                        Spacer()
+                        if buttonIsShowing{
+                            Button(action: {
+                                withAnimation{
+                                    isShowingTextView = false
+                                }
+                            }, label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(Color.blueColor)
+                            })
+                        }
+                    }.frame(width: width + 70, height: height + 12)
+                    
+                }.rotationEffect(rotationAngle)
+                .scaleEffect(magnificationScale)
+                .position(rectPosition)
+                .gesture(
+                    DragGesture(minimumDistance: 3)
+                        .onChanged { value in
+                            self.rectPosition = value.location
+                            self.shouldScroll = false
+                        }
+                        .onEnded { _ in
+                            self.shouldScroll = true
+                        }
+                )
+                .gesture(simultaneous)
+                .onPreferenceChange(ViewHeightKey.self) { height = $0 }
+                .onPreferenceChange(ViewWidthKey.self) { width = $0 }
                 
-                
-                Text(text)
-                    .onDrag {
-                                        NSItemProvider(object: text as NSString)
-                                    }
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewHeightKey.self, value: $0.frame(in: .local).size.height)
-                        Color.clear.preference(key: ViewWidthKey.self, value: $0.frame(in: .local).size.width)
-                    })
-                    .frame(maxWidth: 500)
-                    .multilineTextAlignment(.center)
-                    .opacity(0)
+            }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            //        .background(Color.black.onTapGesture {
+            //            self.endTextEditing()
+            //        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
+            .background(Color.beigeColor.opacity(0.000001)) //por algum motivo, resolvi o bug colocando background
+            .onTapGesture {
+                buttonIsShowing = false
+                self.endTextEditing()
+
             }
-            .onPreferenceChange(ViewHeightKey.self) { height = $0 }
-            .onPreferenceChange(ViewWidthKey.self) { width = $0 }
+            .onAppear(perform: {
+                if (self.conteudo != ""){
+                    text = self.conteudo
+                }
+            })
             
-            
-        }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-//        .background(Color.black.onTapGesture {
-//            self.endTextEditing()
-//        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
-        .onTapGesture {
-            self.endTextEditing()
+
         }
-        .onAppear(perform: {
-            if (self.conteudo != ""){
-              text = self.conteudo
-            }
-        })
-        
     }
 }
 

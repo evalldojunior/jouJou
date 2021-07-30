@@ -8,8 +8,10 @@
 import Foundation
 import SwiftUI
 import PencilKit
+import Introspect
 
 struct Canvas: View {
+    
     //text
     @State var text = 0
     //image
@@ -17,8 +19,7 @@ struct Canvas: View {
     @State private var showingImageOptions = false
     @State private var inputImage: UIImage?
     @State  var image: [Image] = []
-    @State var sourceType: UIImagePickerController.SourceType = .camera
-    @State var numberOfImages = 0
+    @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     //drawing
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
@@ -28,8 +29,8 @@ struct Canvas: View {
     let stickers = ["Passaro", "Coracao", "Sol", "Folha", "Rosa", "Jacinto", "Tulipa", "Sakura", "Lavanda"]
     @State var stickersTapped: [String] = []
     @State var conteudo: String = ""
-
-
+    
+    
     //question
     @State var questionTitle = ""
     @State var isQuestionPopoverPresented = false
@@ -43,62 +44,99 @@ struct Canvas: View {
     //To-Do list
     @State var ToDos = 0
     
+    // data
+    var day = "Sexta-feira, 6 de julho de 2021"
+    @State var shouldScroll: Bool = true
+    @State var dismiss = true
+    
     
     var body: some View {
-        ZStack {
-            ZStack {
-                //desenhos
-                DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
-                //imagens
-                ForEach((0..<image.count), id: \.self) { i in
-                    ImageView(image: image[i])
-                }
-                //stickers
-                ForEach((0..<stickersTapped.count), id: \.self) { k in
-                    ImageView(image: Image(stickersTapped[k]))
-                }
-                //textos
-                ForEach((0..<text), id: \.self) { _ in
-                    TextView(conteudo: conteudo)
-                        
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 45) {
                     
-                }
-                 VStack (spacing: 28){
+                    // data
+                    Text(day)
+                        .font(.custom("LibreBaskerville-Regular", size: 30))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                    
+                    //To-do List
+                    VStack(spacing: 28) {
+                        ForEach((0..<ToDos), id: \.self) { _ in
+                            withAnimation{
+                                ToDoView(dismiss: $dismiss)
+                            }
+                        }
+                        
+                    }
+                    
                     //perguntas
-                    ForEach((0..<questionsTapped.count), id: \.self) { question in
-                        withAnimation{
-                            QuestionView(titulo: $questionsTapped[question])
+                    VStack(spacing: 28) {
+                        ForEach((0..<questionsTapped.count), id: \.self) { question in
+                            withAnimation{
+                                QuestionView(titulo: $questionsTapped[question], dismiss: $dismiss)
+                            }
                         }
                     }
                     
+                    // canvas
+                    ZStack {
+                        
+                        //desenhos
+                        DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
+                        
+                        //imagens
+                        ForEach((0..<image.count), id: \.self) { i in
+                            ImageView(image: image[i], shouldScroll: $shouldScroll)
+                        }
+                        
+                        //stickers
+                        ForEach((0..<stickersTapped.count), id: \.self) { k in
+                            ImageView(image: Image(stickersTapped[k]), shouldScroll: $shouldScroll)
+                        }
+                        
+                        //textos
+                        ForEach((0..<text), id: \.self) { _ in
+                            TextView(shouldScroll: $shouldScroll, conteudo: conteudo)
+                        }
+                        
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    //.background(Color.black)
                 }
-                VStack (spacing: 28){
-                   //To-do List
-                   ForEach((0..<ToDos), id: \.self) { _ in
-                       withAnimation{
-                        ToDoView(titulo: .constant("Passear com doguinho"))
-                       }
-                   }
-                   
-               }
-
-            
-
-            }  .onDrop(of: [.image, .text], isTargeted: nil) { providers in
+                .background(BackgroundCanvas(type: backgroundType).edgesIgnoringSafeArea(.all))
+                
+                
+                
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .introspectScrollView { scrollView in
+                //scrollView.refreshControl = UIRefreshControl()
+                scrollView.isScrollEnabled = shouldScroll
+            }
+            .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
                 return dropController.receiveDrop(
-                  itemProviders: providers)
-              }
-
+                    itemProviders: providers)
+            }
+            .background(BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all))
+            //            .background(
+            //                Image(backgroundType)
+            //                    .resizable()
+            //                    .scaledToFill()
+            //                    .edgesIgnoringSafeArea(.all)
+            //            )
+            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                ImagePicker(image: self.$inputImage, sourceType: sourceType)
+            }
             .toolbar{
-                ToolbarItem(placement: .principal) {
+                ToolbarItemGroup(placement: .principal) {
                     HStack(spacing: 29) {
                         
                         // MARK: - Tool: image
-                        
                         Button(action: {
-                            numberOfImages += 1
                             self.showingImageOptions = true
                         }) {
                             Image(systemName: "photo")
@@ -106,22 +144,67 @@ struct Canvas: View {
                                 .scaledToFit()
                                 .frame(width: 37, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
-                        }    .actionSheet(isPresented: $showingImageOptions, content: {
-                            ActionSheet(title: Text("Titulo"), message: Text("mensagem"), buttons: [
-                                .default(Text("Câmera")) {
+                        }
+                        .popover(isPresented: $showingImageOptions) {
+                            VStack (alignment: .center) {
+                                Text("Adicionar imagem")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.gray)
+                                    .padding([.top, .horizontal])
+                                    .padding(.bottom, 1)
+                                
+                                Text("Selecione uma opção abaixo")
+                                    .fontWeight(.regular)
+                                    .foregroundColor(Color.gray)
+                                    .padding(.bottom)
+                                    
+                                    
+                                Divider()
+                                //camera
+                                Button(action: {
                                     sourceType = .camera
                                     showingImagePicker = true
-                                },
-                                .default(Text("Galeria")) {
+                                    withAnimation{
+                                        self.showingImageOptions.toggle()
+                                    }
+                                }, label: {
+                                    Text("Câmera")
+                                        .fontWeight(.medium)
+                                        .padding()
+                                })
+                                Divider()
+                                //galeria
+                                Button(action: {
                                     sourceType = .photoLibrary
                                     showingImagePicker = true
-                                },
-                                .cancel()
-                            ])
-                        })
-                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                            ImagePicker(image: self.$inputImage, sourceType: sourceType)
+                                    withAnimation{
+                                        self.showingImageOptions.toggle()
+                                    }
+                                }, label: {
+                                    Text("Galeria")
+                                        .fontWeight(.medium)
+                                        .padding()
+                                })
+                            }
+                            .frame(width: 280, height: 230)
+                            
                         }
+//                        .actionSheet(isPresented: $showingImageOptions, content: {
+//                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
+//                                .default(Text("Câmera")) {
+//                                    sourceType = .camera
+//                                    showingImagePicker = true
+//                                },
+//                                .default(Text("Galeria")) {
+//                                    sourceType = .photoLibrary
+//                                    showingImagePicker = true
+//                                },
+//                                .cancel()
+//                            ])
+//                        })
+                        
+                        
+                        
                         
                         // MARK: - Tool: song
                         Button(action: {
@@ -273,32 +356,37 @@ struct Canvas: View {
                                 }, label: {
                                     styleRow(type: "Papel Quadriculado", icon: "icone-papel-quadriculado")
                                 })
-                            }.padding(.top, 34)
-                            .frame(width: 280, height: 280)
+                            }//.padding(.top, 20)
+                            .frame(width: 280, height: 245)
                         }
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            .background(
-                Image(backgroundType)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
+            .onTapGesture {
+                self.endTextEditing()
+                self.dismiss = true
+            }
+            .onAppear(perform: {
+                self.pencilTapped = false
+            })
+            .onDisappear(perform: {
+                self.pencilTapped = false
+            })
+            .navigationTitle("")
+            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarItems(trailing:
+                                    Button(action: {
+                                        
+                                    }) {
+                                        Text("Finalizar")
+                                            
+                                    }
             )
             
         }
-        .onAppear(perform: {
-            
-            self.pencilTapped = false
-        })
-        .onDisappear(perform: {
-            self.pencilTapped = false
-        })
-        .navigationTitle("")
-        .navigationViewStyle(StackNavigationViewStyle())
         
     }
+    
     func loadImage() {
         guard let inputImage = inputImage else { return }
         let converted = Image(uiImage: inputImage)

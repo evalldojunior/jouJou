@@ -67,7 +67,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
@@ -108,7 +108,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
@@ -157,7 +157,7 @@ struct Home: View {
                                 .padding(.horizontal, 56)
                                 //.padding(.vertical)
                             
-                            ScrollView(.horizontal) {
+                            ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
                                     ForEach(0..<images.count, id: \.self) { index in
                                         //gamby
@@ -195,7 +195,8 @@ struct Home: View {
                                         }.frame(width: 315, height: 235, alignment: .leading)
                                         .background(Color.greenColor)
                                         .cornerRadius(10)
-                                        .shadow(radius: 6)
+                                        //.shadow(radius: 6)
+                                        .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
                                     }
                                 }
                             }.frame(height: 260)

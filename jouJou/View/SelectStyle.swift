@@ -14,7 +14,7 @@ struct SelectStyle: View {
     
     var name: String!
     var styles: [String] = ["Objetiva", "Livre", "Bullet"]
-    var ImageStyles: [String] = ["exemplo", "exemplo", "exemplo"]
+    var ImageStyles: [String] = ["objetivo", "livre", "bullet"]
     
     init(name: String) {
         self.name = name
@@ -71,19 +71,20 @@ struct SelectStyle: View {
                                     withAnimation(){
                                         isSelected = index
                                     }
+                                    UserDefaults.standard.setValue(self.selectedStyle, forKey: "Estilo")
                                 }, label: {
                                     VStack(alignment:.center, spacing: 0){
                                         Image("\(ImageStyles[index])")
                                             .resizable()
                                             .scaledToFit()
-                                            .padding(5)
+                                            .padding(ipad13inch() ? 25 : 15)
                                         HStack {
                                             Spacer()
                                             Text("\(styles[index])")
                                                 .font(.custom("Raleway-Bold", size: 20))
                                                 .foregroundColor(.beigeColor)
                                                 .multilineTextAlignment(.center)
-                                                .padding(7)
+                                                .padding(.bottom, 7)
                                             Spacer()
                                         }
                                     }.padding(5)
@@ -92,7 +93,8 @@ struct SelectStyle: View {
                                 .clipped()
                                 .background(selected(index: index) ? Color.orangeColor : Color.greenColor)
                                 .cornerRadius(10)
-                                .shadow(radius: 6)
+                                //.shadow(radius: 6)
+                                .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
                             }
                         }
                         
@@ -104,6 +106,7 @@ struct SelectStyle: View {
                         .font(.custom("Raleway-Regular", size: 20))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
+                    
                     
                 }
                 
