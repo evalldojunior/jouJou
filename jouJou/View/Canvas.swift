@@ -19,7 +19,7 @@ struct Canvas: View {
     @State private var showingImageOptions = false
     @State private var inputImage: UIImage?
     @State  var image: [Image] = []
-    @State var sourceType: UIImagePickerController.SourceType = .camera
+    @State var sourceType: UIImagePickerController.SourceType = .photoLibrary
     //drawing
     @State private var drawingView = PKCanvasView()
     @State var pencilTapped = false
@@ -128,12 +128,14 @@ struct Canvas: View {
             //                    .scaledToFill()
             //                    .edgesIgnoringSafeArea(.all)
             //            )
+            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                ImagePicker(image: self.$inputImage, sourceType: sourceType)
+            }
             .toolbar{
-                ToolbarItem(placement: .principal) {
+                ToolbarItemGroup(placement: .principal) {
                     HStack(spacing: 29) {
                         
                         // MARK: - Tool: image
-                        
                         Button(action: {
                             self.showingImageOptions = true
                         }) {
@@ -143,22 +145,65 @@ struct Canvas: View {
                                 .frame(width: 37, height: 30, alignment: .center)
                                 .foregroundColor(Color.blueColor)
                         }
-                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                            ImagePicker(image: self.$inputImage, sourceType: sourceType)
-                        }
-                        .actionSheet(isPresented: $showingImageOptions, content: {
-                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
-                                .default(Text("Câmera")) {
+                        .popover(isPresented: $showingImageOptions) {
+                            VStack (alignment: .center) {
+                                Text("Adicionar imagem")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.gray)
+                                    .padding([.top, .horizontal])
+                                    .padding(.bottom, 1)
+                                
+                                Text("Selecione uma opção abaixo")
+                                    .fontWeight(.regular)
+                                    .foregroundColor(Color.gray)
+                                    .padding(.bottom)
+                                    
+                                    
+                                Divider()
+                                //camera
+                                Button(action: {
                                     sourceType = .camera
                                     showingImagePicker = true
-                                },
-                                .default(Text("Galeria")) {
+                                    withAnimation{
+                                        self.showingImageOptions.toggle()
+                                    }
+                                }, label: {
+                                    Text("Câmera")
+                                        .fontWeight(.medium)
+                                        .padding()
+                                })
+                                Divider()
+                                //galeria
+                                Button(action: {
                                     sourceType = .photoLibrary
                                     showingImagePicker = true
-                                },
-                                .cancel()
-                            ])
-                        })
+                                    withAnimation{
+                                        self.showingImageOptions.toggle()
+                                    }
+                                }, label: {
+                                    Text("Galeria")
+                                        .fontWeight(.medium)
+                                        .padding()
+                                })
+                            }
+                            .frame(width: 280, height: 230)
+                            
+                        }
+//                        .actionSheet(isPresented: $showingImageOptions, content: {
+//                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
+//                                .default(Text("Câmera")) {
+//                                    sourceType = .camera
+//                                    showingImagePicker = true
+//                                },
+//                                .default(Text("Galeria")) {
+//                                    sourceType = .photoLibrary
+//                                    showingImagePicker = true
+//                                },
+//                                .cancel()
+//                            ])
+//                        })
+                        
+                        
                         
                         
                         // MARK: - Tool: song
