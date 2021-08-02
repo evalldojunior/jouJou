@@ -11,6 +11,7 @@ import PencilKit
 import Introspect
 
 struct Canvas: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     //text
     @State var text = 0
@@ -52,6 +53,7 @@ struct Canvas: View {
     
     var body: some View {
         GeometryReader { geometry in
+            NavigationView {
             ScrollView {
                 VStack(spacing: 45) {
                     
@@ -110,6 +112,7 @@ struct Canvas: View {
                 
                 
             }
+        }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .introspectScrollView { scrollView in
                 //scrollView.refreshControl = UIRefreshControl()
@@ -131,8 +134,7 @@ struct Canvas: View {
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: self.$inputImage, sourceType: sourceType)
             }
-            .toolbar{
-                ToolbarItemGroup(placement: .principal) {
+            .navigationBarItems(trailing:
                     HStack(spacing: 29) {
                         
                         // MARK: - Tool: image
@@ -359,9 +361,10 @@ struct Canvas: View {
                             }//.padding(.top, 20)
                             .frame(width: 280, height: 245)
                         }
-                    }
-                }
-            }
+                        //Spacer()
+                    }.padding(.trailing, 150)
+            )
+            
             .onTapGesture {
                 self.endTextEditing()
                 self.dismiss = true
@@ -374,14 +377,14 @@ struct Canvas: View {
             })
             .navigationTitle("")
             .navigationViewStyle(StackNavigationViewStyle())
-            .navigationBarItems(trailing:
-                                    Button(action: {
-                                        
-                                    }) {
-                                        Text("Finalizar")
-                                            
-                                    }
-            )
+//            .navigationBarItems(trailing:
+//                                    Button(action: {
+//                                        self.presentationMode.wrappedValue.dismiss()
+//                                    }) {
+//                                        Text("Finalizar")
+//                                            
+//                                    }
+//            )
             
         }
         
