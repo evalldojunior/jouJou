@@ -185,6 +185,7 @@ struct Humor: View {
         .navigationBarHidden(true)
         .accentColor(Color.blueColor)
         .navigationViewStyle(StackNavigationViewStyle())
+        .preferredColorScheme(.light)
 
     }
 }

@@ -102,6 +102,7 @@ struct Introduction: View {
                         VStack {
                             Text("welcomeText")
                                 .font(.custom("LibreBaskerville-Regular", size: 30))
+                                .foregroundColor(Color.blackColor)
                             HStack(alignment: .center, spacing: -15){
                                 Spacer()
                                 Text(" jou")
@@ -174,6 +175,7 @@ struct Introduction: View {
             .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .preferredColorScheme(.light)
     }
 }
 
