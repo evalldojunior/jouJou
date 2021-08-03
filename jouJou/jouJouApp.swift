@@ -12,9 +12,9 @@ struct jouJouApp: App {
     let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
-            Introduction()
+            //Introduction()
             //SelectStyle(name: "Evaldo")
-            //Humor()
+            Humor()
             //Home()
             //Calendar()
                 //.environment(\.managedObjectContext, persistenceController.container.viewContext)

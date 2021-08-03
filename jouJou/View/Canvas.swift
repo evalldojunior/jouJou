@@ -48,6 +48,7 @@ struct Canvas: View {
     var day = "Sexta-feira, 6 de julho de 2021"
     @State var shouldScroll: Bool = true
     @State var dismiss = true
+    @State var dismissText = true
     
     
     var body: some View {
@@ -112,7 +113,6 @@ struct Canvas: View {
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .introspectScrollView { scrollView in
-                //scrollView.refreshControl = UIRefreshControl()
                 scrollView.isScrollEnabled = shouldScroll
             }
             .onDrop(of: [.image, .text], isTargeted: nil) { providers in
@@ -122,12 +122,6 @@ struct Canvas: View {
                     itemProviders: providers)
             }
             .background(BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all))
-            //            .background(
-            //                Image(backgroundType)
-            //                    .resizable()
-            //                    .scaledToFill()
-            //                    .edgesIgnoringSafeArea(.all)
-            //            )
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: self.$inputImage, sourceType: sourceType)
             }
@@ -170,6 +164,7 @@ struct Canvas: View {
                                 }, label: {
                                     Text("Câmera")
                                         .fontWeight(.medium)
+                                        .frame(width: 250)
                                         .padding()
                                 })
                                 Divider()
@@ -183,28 +178,13 @@ struct Canvas: View {
                                 }, label: {
                                     Text("Galeria")
                                         .fontWeight(.medium)
+                                        .frame(width: 250)
                                         .padding()
                                 })
                             }
                             .frame(width: 280, height: 230)
                             
                         }
-//                        .actionSheet(isPresented: $showingImageOptions, content: {
-//                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
-//                                .default(Text("Câmera")) {
-//                                    sourceType = .camera
-//                                    showingImagePicker = true
-//                                },
-//                                .default(Text("Galeria")) {
-//                                    sourceType = .photoLibrary
-//                                    showingImagePicker = true
-//                                },
-//                                .cancel()
-//                            ])
-//                        })
-                        
-                        
-                        
                         
                         // MARK: - Tool: song
                         Button(action: {
@@ -220,6 +200,9 @@ struct Canvas: View {
                         // MARK: - Tool: draw
                         
                         Button(action: {
+                            print(shouldScroll)
+                            shouldScroll.toggle()
+                            print(shouldScroll)
                             pencilTapped.toggle()
                             
                         }, label: {
@@ -365,6 +348,7 @@ struct Canvas: View {
             .onTapGesture {
                 self.endTextEditing()
                 self.dismiss = true
+                self.dismissText = true
             }
             .onAppear(perform: {
                 self.pencilTapped = false
@@ -384,6 +368,7 @@ struct Canvas: View {
             )
             
         }
+        .preferredColorScheme(.light)
         
     }
     

@@ -55,23 +55,23 @@ struct TextView: View {
     
     public var conteudo : String
     @State var text: String = "Clique aqui para adicionar o texto"
-    @State private var height: CGFloat = .zero
+    @State private var height: CGFloat = 14
     @State private var width: CGFloat = .zero
     
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
-    @State var buttonIsShowing = false
+    @State var isEditing = false
+//    @Binding var dismiss: Bool
     
     
     init(shouldScroll: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
-        print(conteudo)
         self.conteudo = conteudo
-        print(self.conteudo)
         self._shouldScroll = shouldScroll
+//        self._dismiss = dismiss
     }
     
     var body: some View {
@@ -82,20 +82,24 @@ struct TextView: View {
             
             let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
                 .updating($simultaneousState) { value, state, transation in
-                    if value.first != nil && value.second != nil {
-                        state = .both(angle: value.second!, scale: value.first!)
-                    } else if value.first != nil {
-                        state = .zooming(scale: value.first!)
-                    } else if value.second != nil {
-                        state = .rotating(angle: value.second!)
-                    } else {
-                        state = .inactive
+                    if isEditing {
+                        if value.first != nil && value.second != nil {
+                            state = .both(angle: value.second!, scale: value.first!)
+                        } else if value.first != nil {
+                            state = .zooming(scale: value.first!)
+                        } else if value.second != nil {
+                            state = .rotating(angle: value.second!)
+                        } else {
+                            state = .inactive
+                        }
+                        self.shouldScroll = false
                     }
-                    self.shouldScroll = false
                 }.onEnded { value in
-                    self.viewMagnificationState *= value.first ?? 1
-                    self.viewRotationState += value.second ?? Angle.zero
-                    self.shouldScroll = true
+                    if isEditing {
+                        self.viewMagnificationState *= value.first ?? 1
+                        self.viewRotationState += value.second ?? Angle.zero
+                        self.shouldScroll = true
+                    }
                 }
 
             VStack(alignment: .center) {             
@@ -111,12 +115,17 @@ struct TextView: View {
                         }
                         .onTapGesture {
                             withAnimation{
-                                buttonIsShowing = true
+                                isEditing = true
                             }
                             if self.text == "Clique aqui para adicionar o texto" {
-                                self.text = ""
+                                self.text = " "
                             }
                         }
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.blueColor, lineWidth: isEditing ? 2.0 : 0)
+                                .frame(width: width + 70, height: height + 15)
+                        )
                         
                     
                     
@@ -136,46 +145,72 @@ struct TextView: View {
                     
                     HStack{
                         Spacer()
-                        if buttonIsShowing{
+                        if isEditing{
                             Button(action: {
                                 withAnimation{
                                     isShowingTextView = false
                                 }
                             }, label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(Color.blueColor)
+                                ZStack {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(Color.beigeColor)
+                                        .font(.system(size: 14))
+                                }
+                                .frame(width:24 , height: 24)
+                                .clipped()
+                                .background(Color.blueColor)
+                                .cornerRadius(50)
+                                .shadow(radius: 6)
                             })
+                            .padding(5)
                         }
-                    }.frame(width: width + 70, height: height + 12)
+                    }.frame(width: width + 70)
                     
-                }.rotationEffect(rotationAngle)
+                }
+                .rotationEffect(rotationAngle)
                 .scaleEffect(magnificationScale)
                 .position(rectPosition)
                 .gesture(
-                    DragGesture(minimumDistance: 3)
+                    DragGesture(minimumDistance: shouldScroll ? 3 : 1000)
                         .onChanged { value in
-                            self.rectPosition = value.location
-                            self.shouldScroll = false
+                            if isEditing {
+                                self.rectPosition = value.location
+                                self.shouldScroll = false
+                            }
                         }
                         .onEnded { _ in
-                            self.shouldScroll = true
+                            if isEditing {
+                                self.shouldScroll = true
+                            }
                         }
                 )
                 .gesture(simultaneous)
                 .onPreferenceChange(ViewHeightKey.self) { height = $0 }
                 .onPreferenceChange(ViewWidthKey.self) { width = $0 }
+//                .frame(width: width, height: height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                .background(Color.red.opacity(0.5))
+                .onTapGesture {
+                    isEditing.toggle()
+                    //self.endTextEditing()
+
+                }
                 
-            }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                
+            }
+//            .onChange(of: dismiss, perform: { value in
+//                self.isEditing = false
+//            })
+            //.frame(width: width+100, height: height+100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            
             //        .background(Color.black.onTapGesture {
             //            self.endTextEditing()
             //        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
-            .background(Color.beigeColor.opacity(0.000001)) //por algum motivo, resolvi o bug colocando background
-            .onTapGesture {
-                buttonIsShowing = false
-                self.endTextEditing()
-
-            }
+            //.background(Color.red) //por algum motivo, resolvi o bug colocando background
+//            .onTapGesture {
+//                isEditing.toggle()
+//                self.endTextEditing()
+//
+//            }
             .onAppear(perform: {
                 if (self.conteudo != ""){
                     text = self.conteudo

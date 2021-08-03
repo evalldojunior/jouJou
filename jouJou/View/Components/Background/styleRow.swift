@@ -15,7 +15,6 @@ struct styleRow: View {
         HStack{
             Text(type)
                 .font(Font.custom("Raleway-Regular", size: 13))
-                .foregroundColor(Color.blackColor)
             Spacer()
             Image(icon)
                 .resizable()
