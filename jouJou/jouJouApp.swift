@@ -12,7 +12,12 @@ struct jouJouApp: App {
     let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
-            Introduction()
+            if UserDefaults.standard.bool(forKey: "FirstLaunch") == true{
+                Humor()
+            } else {
+                Introduction()
+            }
+            //Introduction()
             //SelectStyle(name: "Evaldo")
             //Humor()
             //Home()
