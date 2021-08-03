@@ -253,7 +253,7 @@ struct Home: View {
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
             .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
             
-        }
+        } 
         .navigationTitle("Home")
         .navigationBarHidden(true)
     }
