@@ -104,17 +104,20 @@ struct Canvas: View {
                         
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    //.background(Color.black)
+                    .background(Color.black.opacity(0.5))
+                }
+                .introspectScrollView { scrollView in
+                    scrollView.isScrollEnabled = shouldScroll
                 }
                 .background(BackgroundCanvas(type: backgroundType).edgesIgnoringSafeArea(.all))
                 
                 
                 
+//                .introspectScrollView { scrollView in
+//                    scrollView.isScrollEnabled = teste
+//                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
-            .introspectScrollView { scrollView in
-                scrollView.isScrollEnabled = shouldScroll
-            }
             .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
@@ -186,23 +189,21 @@ struct Canvas: View {
                             
                         }
                         
-                        // MARK: - Tool: song
-                        Button(action: {
-                            
-                        }, label: {
-                            Image(systemName: "music.note")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 28, height: 30, alignment: .center)
-                                .foregroundColor(Color.blueColor)
-                        })
+//                        // MARK: - Tool: song
+//                        Button(action: {
+//                            
+//                        }, label: {
+//                            Image(systemName: "music.note")
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(width: 28, height: 30, alignment: .center)
+//                                .foregroundColor(Color.blueColor)
+//                        })
                         
                         // MARK: - Tool: draw
                         
                         Button(action: {
-                            print(shouldScroll)
                             shouldScroll.toggle()
-                            print(shouldScroll)
                             pencilTapped.toggle()
                             
                         }, label: {
