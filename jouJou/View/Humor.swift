@@ -17,7 +17,10 @@ struct Humor: View {
     var moods: [String] = ["Animade!", "Tranquile", "OK", "Ansiose", "Estressade", "Para Baixo"]
     var ImageMoods: [String] = ["animade", "tranquile", "ok", "ansiose", "estressade", "parabaixo"]
     var colorMoods: [Color] = [Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor, Color.greenColor] // mudar para as cores corretas depois
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Humores.entity(), sortDescriptors: []) var humores: FetchedResults<Humores>
     
+
     var collums = [
         // define number of caullum here
         GridItem(.flexible(), spacing: 0),
@@ -56,6 +59,7 @@ struct Humor: View {
             return false
         }
     }
+   
     
     init() {
         UINavigationBar.appearance().backgroundColor = UIColor(Color.beigeColor.opacity(0.0001))
@@ -131,6 +135,11 @@ struct Humor: View {
                                 NavigationLink(destination: Canvas()) {
                                     Button(action: {
                                         //action escrever sobre isso
+                                        //cria dia
+                                        
+                                        //salvar humor
+                                     
+                                        
                                     }, label: {
                                         HStack {
                                             Spacer()
@@ -176,6 +185,18 @@ struct Humor: View {
                 .padding(.horizontal, 90)
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                 .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+                .onDisappear(perform: {
+                    if selectedMood != ""{
+                        let humor = Humores(context: managedObjectContext)
+                        humor.nome = selectedMood
+                        humor.dia = Date()
+                        PersistenceController.shared.save()
+                        print("salvou?")
+                    }
+                   
+                    
+                   
+                })
                 
             }
             .navigationTitle("")

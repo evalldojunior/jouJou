@@ -46,8 +46,13 @@ struct Canvas: View {
     
     // data
     var day = "Sexta-feira, 6 de julho de 2021"
+    var dateFormatter = DateFormatter()
+    var today = Date()
     @State var shouldScroll: Bool = true
     @State var dismiss = true
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Anotacao.entity(), sortDescriptors: []) var anotacoes: FetchedResults<Anotacao>
+    
     
     
     var body: some View {
@@ -56,7 +61,7 @@ struct Canvas: View {
                 VStack(spacing: 45) {
                     
                     // data
-                    Text(day)
+                    Text(dateFormatter.string(from: today))
                         .font(.custom("LibreBaskerville-Regular", size: 30))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
@@ -98,7 +103,7 @@ struct Canvas: View {
                         
                         //textos
                         ForEach((0..<text), id: \.self) { _ in
-                            TextView(shouldScroll: $shouldScroll, conteudo: conteudo)
+                            TextView( shouldScroll: $shouldScroll, conteudo: conteudo)
                         }
                         
                     }
@@ -368,15 +373,30 @@ struct Canvas: View {
             }
             .onAppear(perform: {
                 self.pencilTapped = false
+                dateFormatter.dateStyle = .full
+                dateFormatter.timeStyle = .none
+                dateFormatter.locale = Locale.current
+                
             })
             .onDisappear(perform: {
                 self.pencilTapped = false
+                print("desapareceu")
+                
+
             })
             .navigationTitle("")
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing:
                                     Button(action: {
+                                        let image = body.asImage(size:  CGSize(width: geometry.size.width, height: geometry.size.height))
+                                        let data = image.jpegData(compressionQuality: 1.0)
+                                        let anotacao = Anotacao(context: managedObjectContext)
+                                        anotacao.imagem = data
+                                        anotacao.dia = Date()
                                         
+
+                                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+
                                     }) {
                                         Text("Finalizar")
                                             
@@ -391,6 +411,29 @@ struct Canvas: View {
         guard let inputImage = inputImage else { return }
         let converted = Image(uiImage: inputImage)
         image.append(converted)
+    }
+}
+extension UIView{
+    func image()->UIImage{
+        // Begin context
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+
+        // Draw view in that context
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+
+        // And finally, get image
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image!
+    }
+}
+
+extension View {
+    func asImage(size: CGSize) -> UIImage {
+        let controller = UIHostingController(rootView: self)
+        controller.view.bounds = CGRect(origin: .zero, size: size)
+        let image = controller.view.image()
+        return image
     }
 }
 
