@@ -11,7 +11,7 @@ import PencilKit
 import Introspect
 
 struct Canvas: View {
-    
+    @State var btnFinalizar:Bool = false
     //text
     @State var text = 0
     //image
@@ -383,15 +383,19 @@ struct Canvas: View {
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing:
                                     Button(action: {
+                                        NavigationLink(destination: Home(), isActive: $btnFinalizar, label:{ })
+
                                         let image = body.asImage(size:  CGSize(width: geometry.size.width, height: geometry.size.height))
                                         let data = image.jpegData(compressionQuality: 1.0)
                                         let anotacao = Anotacao(context: managedObjectContext)
                                         anotacao.imagem = data
                                         anotacao.dia = Date()
                                         
-
-                                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-
+                                        btnFinalizar.toggle()
+                                        
+                                        
+                                        
+                                        
                                     }) {
                                         Text("Finalizar")
                                             

@@ -203,6 +203,9 @@ struct Humor: View {
             .navigationTitle("")
             .navigationBarHidden(true)
         }.onAppear(perform: {
+            if(!UserDefaults.standard.bool(forKey: "FirstLaunch")){
+                addRecord()
+            }
             UserDefaults.standard.set(true, forKey: "FirstLaunch")
         })
         .navigationTitle("")
@@ -212,5 +215,19 @@ struct Humor: View {
         .preferredColorScheme(.light)
 
     }
+    
+    
+    func addRecord(){
+        let record = Anotacao(context: managedObjectContext)
+        var dateComps = Date(timeIntervalSinceReferenceDate: 5465)
+        
+        record.dia = dateComps
+        let image = UIImage(named: "exemploAnotacao")
+        record.imagem = image?.jpegData(compressionQuality: 1.0)
+        PersistenceController.shared.save()
+
+
+    }
 }
+
 

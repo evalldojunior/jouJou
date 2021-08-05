@@ -23,7 +23,7 @@ struct jouJouApp: App {
             }
             //Introduction()
             //SelectStyle(name: "Evaldo")
-            Humor()
+            //Humor()
             //Home()
             //Calendar()
         }

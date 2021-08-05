@@ -178,7 +178,6 @@ struct Introduction: View {
         .preferredColorScheme(.light)
     }
 }
-
 struct Introduction_Previews: PreviewProvider {
     static var previews: some View {
         Introduction()

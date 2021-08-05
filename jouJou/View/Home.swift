@@ -32,7 +32,7 @@ struct Home: View {
    
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Humores.entity(), sortDescriptors: []) var humores: FetchedResults<Humores>
-    @FetchRequest(entity: Anotacao.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Anotacao.dia, ascending: true)]) var anotacoes: FetchedResults<Anotacao>
+    @FetchRequest(entity: Anotacao.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Anotacao.dia, ascending: false)]) var anotacoes: FetchedResults<Anotacao>
 
     
     var body: some View {
@@ -121,7 +121,6 @@ struct Home: View {
 //                        }
                         
                         
-                        Spacer().frame(height: 60)
                         
                         /// escritas mais recentes
                         VStack(alignment: .leading){
@@ -186,6 +185,8 @@ struct Home: View {
                                     }//foreach
                                 }
                             }.frame(height: 260)
+                            Spacer().frame(height: 60)
+
                         }
                         
                         
