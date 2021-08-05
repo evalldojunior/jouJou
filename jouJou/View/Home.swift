@@ -7,11 +7,13 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 struct Home: View {
     
     //temporárias
     var mes:String = "Julho"
+    var dateFormatter = DateFormatter()
     
     // resumo do mes
     @State var title: String = "Julho está sendo um mês animado!"
@@ -19,13 +21,19 @@ struct Home: View {
     @State var image: String = "exemplo1"
     
     // fotos do mes
-    var images: [String] = ["exemplo2", "exemplo3", "exemplo2", "exemplo3", "exemplo2"]
     var subtitles: [String] = ["gay rights", "a lua - Pabllo Vittar", "mais gays", "a lua me traiu", "chega de gays"]
     var days: [String] = ["13/07", "12/07", "11/07", "10/07", "09/07"]
     
     // escritas mais recentes
     var text2 = "Hoje eu tananan tananan blablabla foi muito massa pq tipo foi legal demais! e fora bolsonaro lixo ..."
     var subtitlesCards: [String] = ["13 de julho de 2021", "12 de julho de 2021", "11 de julho de 2021", "10 de julho de 2021", "09 de julho de 2021"]
+    var images: [String] = ["exemplo2", "exemplo3", "exemplo2", "exemplo3", "exemplo2"]
+
+   
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Humores.entity(), sortDescriptors: []) var humores: FetchedResults<Humores>
+    @FetchRequest(entity: Anotacao.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Anotacao.dia, ascending: true)]) var anotacoes: FetchedResults<Anotacao>
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,6 +58,7 @@ struct Home: View {
                                     .foregroundColor(.blackColor)
                                     .multilineTextAlignment(.leading)
                             }
+                            
                             Spacer()
                             Image(image)
                                 .resizable()
@@ -62,46 +71,9 @@ struct Home: View {
                         Spacer().frame(height: 60)
                         
                         /// fotos do mes
-                        VStack(alignment: .leading){
-                            Text("algumasFotos \(mes)")
-                                .font(.custom("Raleway-Bold", size: 24))
-                                .foregroundColor(.blackColor)
-                                .multilineTextAlignment(.leading)
-                                .padding(.horizontal, 56)
-                                //.padding(.vertical)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 20) {
-                                    ForEach(0..<images.count, id: \.self) { index in
-                                        //gamby
-                                        if index == 0 {
-                                            Spacer().frame(width: 36)
-                                        }
-                                        
-                                        VStack() {
-                                            Image(images[index])
-                                                .resizable()
-                                                .scaledToFill()
-                                                .frame(width: 186, height: 192, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                                .cornerRadius(10)
-                                            
-                                            Text(subtitles[index])
-                                                .font(.custom("Raleway-SemiBold", size: 14))
-                                                .foregroundColor(.blackColor)
-                                                .multilineTextAlignment(.center)
-                                            
-                                            Text(days[index])
-                                                .font(.custom("Raleway-Regular", size: 14))
-                                                .foregroundColor(.blackColor)
-                                                .multilineTextAlignment(.center)
-                                        }.frame(width: 190, height: 235, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                    }
-                                }
-                            }.frame(height: 250)
-                        }
-                        
-//                        Spacer().frame(height: 60)
-//                        
+                       Fotos()
+                        Spacer().frame(height: 60)
+
 //                        /// musicas do mes
 //                        VStack(alignment: .leading){
 //                            Text("algumasMusicas \(mes)")
@@ -110,7 +82,7 @@ struct Home: View {
 //                                .multilineTextAlignment(.leading)
 //                                .padding(.horizontal, 56)
 //                                //.padding(.vertical)
-//                            
+
 //                            ScrollView(.horizontal, showsIndicators: false) {
 //                                LazyHStack(spacing: 20) {
 //                                    ForEach(0..<images.count, id: \.self) { index in
@@ -125,13 +97,13 @@ struct Home: View {
 //                                                .frame(width: 54, height: 54, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 //                                                .cornerRadius(5)
 //                                                .padding(10)
-//                                            
+
 //                                            VStack(alignment: .leading, spacing: 3){
 //                                                Text("Solar Power")
 //                                                    .font(.custom("Raleway-SemiBold", size: 14))
 //                                                    .foregroundColor(.blackColor)
 //                                                    .multilineTextAlignment(.leading)
-//                                                
+
 //                                                Text("Lorde")
 //                                                    .font(.custom("Raleway-Regular", size: 14))
 //                                                    .foregroundColor(.blackColor)
@@ -142,7 +114,7 @@ struct Home: View {
 //                                        .cornerRadius(10)
 //                                        //.shadow(radius: 6)
 //                                        .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
-//                                        
+
 //                                    }
 //                                }
 //                            }.frame(height: 100)
@@ -162,45 +134,56 @@ struct Home: View {
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 20) {
-                                    ForEach(0..<images.count, id: \.self) { index in
+                                    ForEach(0..<anotacoes.count, id: \.self) { index in
                                         //gamby
                                         if index == 0 {
                                             Spacer().frame(width: 36)
                                         }
                                         
+                                           
                                         VStack(alignment: .center, spacing: 10) {
+                                            NavigationLink(
+                                                destination: CanvasEditor(anotacao: anotacoes[index]),
+                                             label: {
+                                            
                                             VStack{
                                                 HStack{
-                                                    Text(text2)
-                                                        .font(.custom("Raleway-Regular", size: 20))
-                                                        .foregroundColor(.blackColor)
-                                                        .multilineTextAlignment(.leading)
-                                                    Spacer()
-                                                    Image(image)
+//                                                    Text(text2)
+//                                                        .font(.custom("Raleway-Regular", size: 20))
+//                                                        .foregroundColor(.blackColor)
+//                                                        .multilineTextAlignment(.leading)
+//                                                    Spacer()
+//
+                                                    Image( uiImage: UIImage(data: (anotacoes[index].imagem)! as Data) ?? UIImage())
                                                         .resizable()
-                                                        .scaledToFit()
+                                                        .scaledToFill()
                                                         //.padding(10)
                                                         .frame(width: 100, height: 112, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                                    
                                                 }
                                             }
                                             .padding()
                                             .frame(width: 300, height: 181)
                                             .background(Color.beigeColor)
                                             .cornerRadius(10)
+                                             })
                                             HStack{
-                                                Text(subtitlesCards[index])
+                                                Text(dateFormatter.string(from: anotacoes[index].dia!))
                                                     .font(.custom("Raleway-Bold", size: 20))
                                                     .foregroundColor(.beigeColor)
                                                     .multilineTextAlignment(.leading)
                                                     .padding(.horizontal)
                                                 Spacer()
                                             }
+                                        
+                                            
                                         }.frame(width: 315, height: 235, alignment: .leading)
                                         .background(Color.greenColor)
                                         .cornerRadius(10)
                                         //.shadow(radius: 6)
                                         .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
-                                    }
+                                            
+                                    }//foreach
                                 }
                             }.frame(height: 260)
                         }
@@ -252,6 +235,20 @@ struct Home: View {
             //.padding(.horizontal, 90)
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
             .background(Color.beigeColor.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/))
+            .onAppear(perform: {
+                //dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
+                dateFormatter.dateStyle = .full
+                dateFormatter.timeStyle = .none
+                dateFormatter.locale = Locale.current
+                
+                
+                for humor in humores{
+                    print(humor.nome!)
+                }
+                print("home")
+
+            })
+            
             
         } 
         .navigationTitle("Home")

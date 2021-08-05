@@ -52,4 +52,32 @@ struct PersistenceController {
             }
         })
     }
+    
+    func save(completion: @escaping (Error?) -> () = {_ in}){
+        let context = container.viewContext
+        if context.hasChanges{
+            do {
+                try context.save()
+            } catch {
+                completion(error)
+            }
+        }
+    }
+    
+    func delete(_ object: NSManagedObject, completion: @escaping(Error?)->()={_ in}){
+        let context = container.viewContext
+        context.delete(object)
+        save(completion: completion)
+    }
+    
+    func getAnotacao() -> [Anotacao]{
+        let fetchRequest: NSFetchRequest<Anotacao> = Anotacao.fetchRequest()
+        
+        do{
+            return try container.viewContext.fetch(fetchRequest)
+        }catch{
+            return []
+        }
+        
+    }
 }

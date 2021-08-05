@@ -12,15 +12,22 @@ import FSCalendar
 
 
 struct Calendar: View {
-    @State var selectedDate:Date = Date()
+    @State var selectedDate:Date? = Date()
     @State var selection:Bool = false
+    @State var index:Int = 0
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @FetchRequest(entity: Humores.entity(), sortDescriptors: []) var humores: FetchedResults<Humores>
+    @FetchRequest(entity: Anotacao.entity(), sortDescriptors: []) var anotacoes: FetchedResults<Anotacao>
+
+    
 
     var body: some View {
         ZStack{
-            CalendarRepresentable(selectedDate: $selectedDate, selection: $selection)
+            CalendarRepresentable(selectedDate: $selectedDate, selection: $selection,anotacaoIndex: $index, humores:humores, anotacoes: anotacoes)
                 .background(Color.beigeColor)
+        
             NavigationLink(
-                destination: CanvasEditor(selectedDate: $selectedDate),
+                destination: CanvasEditor(anotacao: anotacoes[index]),
                 isActive: $selection,
                 label: {
                 })
@@ -33,8 +40,12 @@ struct Calendar: View {
 struct CalendarRepresentable:UIViewRepresentable{
     typealias UIViewType = FSCalendar
     var calendar = FSCalendar()
-    @Binding var selectedDate: Date
+
+    @Binding var selectedDate: Date?
     @Binding var selection:Bool
+    @Binding var anotacaoIndex:Int
+    var humores:FetchedResults<Humores>
+    var anotacoes:FetchedResults<Anotacao>
     
     func updateUIView(_ uiView: FSCalendar, context: Context) {
         
@@ -70,8 +81,18 @@ struct CalendarRepresentable:UIViewRepresentable{
         
         func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
             parent.selectedDate = date
-            print(String(parent.selectedDate.description))
-            parent.selection.toggle()
+            let dateFormatter = DateFormatter()
+
+            dateFormatter.dateFormat = "dd/MM/YY"
+            for (index, anotacao) in parent.anotacoes.enumerated(){
+                if dateFormatter.string(from: anotacao.dia!) == dateFormatter.string(from: parent.selectedDate!){
+                    parent.anotacaoIndex = index
+                    parent.selection.toggle()
+                    
+                }
+            }
+           // print(String(parent.selectedDate.description))
+            
             
             
             //ir para a pagina do dia
@@ -84,22 +105,29 @@ struct CalendarRepresentable:UIViewRepresentable{
             
             return cell
         }
-//        func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-//            return 1
-//        }
+        func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+            let dateFormatter = DateFormatter()
+
+            dateFormatter.dateFormat = "dd/MM/YY"
+
+            for humor in parent.humores{
+                if dateFormatter.string(from: date) == dateFormatter.string(from: humor.dia!) {
+                    return 1
+                }
+            }
+            return 0
+        }
 //        func calendar(_ calendar: FSCalendar, imageFor date: Date) -> UIImage? {
 //            //retorna uma imagem para uma célula
+//            if (calendar.){
+//
+//            }
 //            return UIImage(systemName: "pencil.circle")
 //        }
-       
+//
     }
     
     
     
     
-}
-struct Calendar_Previews: PreviewProvider {
-    static var previews: some View {
-        Calendar()
-    }
 }
