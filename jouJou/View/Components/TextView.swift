@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import Introspect
+
 enum SimultaneousState {
     case inactive
     case rotating(angle: Angle)
@@ -43,6 +45,7 @@ struct TextView: View {
     @State var viewMagnificationState = CGFloat(1.0)
     @State var isShowingTextView = true
     @Binding var shouldScroll: Bool
+    @Binding var dismiss: Bool
 
     
     var rotationAngle: Angle {
@@ -55,23 +58,23 @@ struct TextView: View {
     
     public var conteudo : String
     @State var text: String = "Clique aqui para adicionar o texto"
-    @State private var height: CGFloat = .zero
+    @State private var height: CGFloat = 14
     @State private var width: CGFloat = .zero
     
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
-    @State var buttonIsShowing = false
+    @State var isEditing = false
     
     
-    init(shouldScroll: Binding<Bool>, conteudo:String){
+    
+    init(shouldScroll: Binding<Bool>, dismiss: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
-        print(conteudo)
         self.conteudo = conteudo
-        print(self.conteudo)
         self._shouldScroll = shouldScroll
+        self._dismiss = dismiss
     }
     
     var body: some View {
@@ -82,41 +85,47 @@ struct TextView: View {
             
             let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
                 .updating($simultaneousState) { value, state, transation in
-                    if value.first != nil && value.second != nil {
-                        state = .both(angle: value.second!, scale: value.first!)
-                    } else if value.first != nil {
-                        state = .zooming(scale: value.first!)
-                    } else if value.second != nil {
-                        state = .rotating(angle: value.second!)
-                    } else {
-                        state = .inactive
+                    if isEditing {
+                        if value.first != nil && value.second != nil {
+                            state = .both(angle: value.second!, scale: value.first!)
+                        } else if value.first != nil {
+                            state = .zooming(scale: value.first!)
+                        } else if value.second != nil {
+                            state = .rotating(angle: value.second!)
+                        } else {
+                            state = .inactive
+                        }
+                        self.shouldScroll = false
                     }
-                    self.shouldScroll = false
                 }.onEnded { value in
-                    self.viewMagnificationState *= value.first ?? 1
-                    self.viewRotationState += value.second ?? Angle.zero
-                    self.shouldScroll = true
+                    if isEditing {
+                        self.viewMagnificationState *= value.first ?? 1
+                        self.viewRotationState += value.second ?? Angle.zero
+                        self.shouldScroll = true
+                    }
                 }
 
-            VStack(alignment: .center) {             
+                       
                 ZStack (alignment: .top){
                     TextEditor(text: $text)
+                        .introspectTextView { textView in
+                            textView.isScrollEnabled = false
+                        }
                         .frame(width: width + 17, height: height + 17)
                         .fixedSize(horizontal: false, vertical: true)
                         .font(Font.custom("Raleway-Regular", size: 24))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
-                        .introspectTextView { textView in
-                            textView.isScrollEnabled = false
-                        }
                         .onTapGesture {
                             withAnimation{
-                                buttonIsShowing = true
+                                isEditing.toggle()
+                                self.dismiss = false
                             }
                             if self.text == "Clique aqui para adicionar o texto" {
-                                self.text = ""
+                                self.text = " "
                             }
                         }
+                        
                         
                     
                     
@@ -136,46 +145,85 @@ struct TextView: View {
                     
                     HStack{
                         Spacer()
-                        if buttonIsShowing{
+                        if isEditing{
                             Button(action: {
                                 withAnimation{
                                     isShowingTextView = false
                                 }
                             }, label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(Color.blueColor)
+                                ZStack {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(Color.beigeColor)
+                                        .font(.system(size: 14))
+                                }
+                                .frame(width:24 , height: 24)
+                                .clipped()
+                                .background(Color.blueColor)
+                                .cornerRadius(50)
+                                .shadow(radius: 6)
                             })
+                            .padding(5)
                         }
-                    }.frame(width: width + 70, height: height + 12)
+                    }.frame(width: width + 70)
                     
-                }.rotationEffect(rotationAngle)
-                .scaleEffect(magnificationScale)
-                .position(rectPosition)
-                .gesture(
-                    DragGesture(minimumDistance: 3)
-                        .onChanged { value in
-                            self.rectPosition = value.location
-                            self.shouldScroll = false
-                        }
-                        .onEnded { _ in
-                            self.shouldScroll = true
-                        }
-                )
-                .gesture(simultaneous)
+                }
+                
                 .onPreferenceChange(ViewHeightKey.self) { height = $0 }
                 .onPreferenceChange(ViewWidthKey.self) { width = $0 }
+//                .frame(width: width, height: height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                .background(Color.red.opacity(0.5))
+                //.frame(width: width + 17, height: height + 17)
+                //.background(Color.red)
                 
-            }.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                .onTapGesture {
+//                    isEditing.toggle()
+//                    self.dismiss = false
+//                    print("TOCOU")
+//                    //self.endTextEditing()
+//
+//                }
+                
+                
+            
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.blueColor, lineWidth: isEditing ? 2.0 : 0)
+                    .frame(width: width + 70, height: height + 15)
+            )
+            .rotationEffect(rotationAngle)
+            .scaleEffect(magnificationScale)
+            .position(rectPosition)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        if isEditing {
+                            self.shouldScroll = false
+                            self.rectPosition = value.location
+                        }
+                    }
+                    .onEnded { _ in
+                        if isEditing {
+                            self.shouldScroll = true
+                        }
+                    }
+            )
+            .gesture(simultaneous)
+            .onChange(of: dismiss, perform: { value in
+                if dismiss {
+                    self.isEditing = false
+                } 
+            })
+            //.frame(width: width+100, height: height+100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            
             //        .background(Color.black.onTapGesture {
             //            self.endTextEditing()
             //        }) // coloquei aqui porque o de baixo nao tava pegando kkkkk
-            .background(Color.beigeColor.opacity(0.000001)) //por algum motivo, resolvi o bug colocando background
-            .onTapGesture {
-                buttonIsShowing = false
-                self.endTextEditing()
-
-            }
+            //.background(Color.red) //por algum motivo, resolvi o bug colocando background
+//            .onTapGesture {
+//                isEditing.toggle()
+//                self.endTextEditing()
+//
+//            }
             .onAppear(perform: {
                 if (self.conteudo != ""){
                     text = self.conteudo
@@ -197,7 +245,6 @@ struct ViewHeightKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
-        print("Reporting height: \(value)")
     }
 }
 
@@ -205,6 +252,5 @@ struct ViewWidthKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
-        print("Reporting width: \(value)")
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Introspect
 
 struct Humor: View {
     
@@ -201,11 +202,14 @@ struct Humor: View {
             }
             .navigationTitle("")
             .navigationBarHidden(true)
-        }
+        }.onAppear(perform: {
+            UserDefaults.standard.set(true, forKey: "FirstLaunch")
+        })
         .navigationTitle("")
         .navigationBarHidden(true)
         .accentColor(Color.blueColor)
         .navigationViewStyle(StackNavigationViewStyle())
+        .preferredColorScheme(.light)
 
     }
 }

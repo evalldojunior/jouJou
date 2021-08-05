@@ -73,7 +73,7 @@ struct Home: View {
                         /// fotos do mes
                        Fotos()
                         Spacer().frame(height: 60)
-                        
+
 //                        /// musicas do mes
 //                        VStack(alignment: .leading){
 //                            Text("algumasMusicas \(mes)")
@@ -82,7 +82,7 @@ struct Home: View {
 //                                .multilineTextAlignment(.leading)
 //                                .padding(.horizontal, 56)
 //                                //.padding(.vertical)
-//
+
 //                            ScrollView(.horizontal, showsIndicators: false) {
 //                                LazyHStack(spacing: 20) {
 //                                    ForEach(0..<images.count, id: \.self) { index in
@@ -97,13 +97,13 @@ struct Home: View {
 //                                                .frame(width: 54, height: 54, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 //                                                .cornerRadius(5)
 //                                                .padding(10)
-//
+
 //                                            VStack(alignment: .leading, spacing: 3){
 //                                                Text("Solar Power")
 //                                                    .font(.custom("Raleway-SemiBold", size: 14))
 //                                                    .foregroundColor(.blackColor)
 //                                                    .multilineTextAlignment(.leading)
-//
+
 //                                                Text("Lorde")
 //                                                    .font(.custom("Raleway-Regular", size: 14))
 //                                                    .foregroundColor(.blackColor)
@@ -114,7 +114,7 @@ struct Home: View {
 //                                        .cornerRadius(10)
 //                                        //.shadow(radius: 6)
 //                                        .shadow(color: .init(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.2), radius: 5, x: 0.0, y: 0.0)
-//
+
 //                                    }
 //                                }
 //                            }.frame(height: 100)
@@ -250,7 +250,7 @@ struct Home: View {
             })
             
             
-        }
+        } 
         .navigationTitle("Home")
         .navigationBarHidden(true)
     }

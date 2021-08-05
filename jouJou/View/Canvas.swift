@@ -53,86 +53,92 @@ struct Canvas: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(entity: Anotacao.entity(), sortDescriptors: []) var anotacoes: FetchedResults<Anotacao>
     
+    @State var dismissText = true
+    @State var shouldScrollPencil: Bool = true
     
     
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack(spacing: 45) {
-                    
-                    // data
-                    Text(dateFormatter.string(from: today))
-                        .font(.custom("LibreBaskerville-Regular", size: 30))
-                        .foregroundColor(Color.blackColor)
-                        .multilineTextAlignment(.center)
-                    
-                    //To-do List
-                    VStack(spacing: 28) {
-                        ForEach((0..<ToDos), id: \.self) { _ in
-                            withAnimation{
-                                ToDoView(dismiss: $dismiss)
-                            }
-                        }
-                        
-                    }
-                    
-                    //perguntas
-                    VStack(spacing: 28) {
-                        ForEach((0..<questionsTapped.count), id: \.self) { question in
-                            withAnimation{
-                                QuestionView(titulo: $questionsTapped[question], dismiss: $dismiss)
-                            }
-                        }
-                    }
+
+                VStack() {
                     
                     // canvas
-                    ZStack {
+                    ZStack(alignment: .top){
                         
                         //desenhos
                         DrawingView(showingToolPicker: $pencilTapped, drawingView: $drawingView)
                         
+                        // parte de cima
+                        VStack(spacing: 45) {
+                            Spacer().frame(height: 5).background(Color.red)
+                            // data
+                    Text(dateFormatter.string(from: today))
+                        .font(.custom("LibreBaskerville-Regular", size: 30))
+                        .foregroundColor(Color.blackColor)
+                        .multilineTextAlignment(.center)
+                            
+                            //To-do List
+                            VStack(spacing: 28) {
+                                ForEach((0..<ToDos), id: \.self) { _ in
+                                    withAnimation{
+                                        ToDoView(dismiss: $dismiss)
+                                    }
+                                }
+                                
+                            }
+                            
+                            //perguntas
+                            VStack(spacing: 28) {
+                                ForEach((0..<questionsTapped.count), id: \.self) { question in
+                                    withAnimation{
+                                        QuestionView(titulo: $questionsTapped[question], dismiss: $dismiss)
+                                    }
+                                }
+                            }
+                            
+                            Spacer().frame(height: 600)
+                        }
+                        
                         //imagens
                         ForEach((0..<image.count), id: \.self) { i in
-                            ImageView(image: image[i], shouldScroll: $shouldScroll)
+                            ImageView(image: image[i])
                         }
                         
                         //stickers
                         ForEach((0..<stickersTapped.count), id: \.self) { k in
-                            ImageView(image: Image(stickersTapped[k]), shouldScroll: $shouldScroll)
+                            ImageView(image: Image(stickersTapped[k]))
                         }
                         
                         //textos
                         ForEach((0..<text), id: \.self) { _ in
-                            TextView( shouldScroll: $shouldScroll, conteudo: conteudo)
+
+                            TextView(shouldScroll: $shouldScroll, dismiss: $dismissText, conteudo: conteudo)
                         }
-                        
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    //.background(Color.black)
+                    .frame(width: geometry.size.width)
+                    .frame(minHeight: geometry.size.height)
+                    //.background(Color.black.opacity(0.2))
+                }
+                .introspectScrollView { scrollView in
+                    scrollView.isScrollEnabled = shouldScrollPencil
                 }
                 .background(BackgroundCanvas(type: backgroundType).edgesIgnoringSafeArea(.all))
                 
                 
                 
+//                .introspectScrollView { scrollView in
+//                    scrollView.isScrollEnabled = teste
+//                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
-            .introspectScrollView { scrollView in
-                //scrollView.refreshControl = UIRefreshControl()
-                scrollView.isScrollEnabled = shouldScroll
-            }
             .onDrop(of: [.image, .text], isTargeted: nil) { providers in
                 let dropController = ContentDropController(
                     images: $image,text: $text, conteudo: $conteudo)
                 return dropController.receiveDrop(
                     itemProviders: providers)
             }
-            .background(BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all))
-            //            .background(
-            //                Image(backgroundType)
-            //                    .resizable()
-            //                    .scaledToFill()
-            //                    .edgesIgnoringSafeArea(.all)
-            //            )
+            .background(shouldScrollPencil ? BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all) : BackgroundCanvas2(type: backgroundType).edgesIgnoringSafeArea(.all))
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(image: self.$inputImage, sourceType: sourceType)
             }
@@ -175,6 +181,7 @@ struct Canvas: View {
                                 }, label: {
                                     Text("Câmera")
                                         .fontWeight(.medium)
+                                        .frame(width: 250)
                                         .padding()
                                 })
                                 Divider()
@@ -188,43 +195,29 @@ struct Canvas: View {
                                 }, label: {
                                     Text("Galeria")
                                         .fontWeight(.medium)
+                                        .frame(width: 250)
                                         .padding()
                                 })
                             }
                             .frame(width: 280, height: 230)
                             
                         }
-//                        .actionSheet(isPresented: $showingImageOptions, content: {
-//                            ActionSheet(title: Text("Adicionar Imagem"), message: Text("Selecione uma opção abaixo"), buttons: [
-//                                .default(Text("Câmera")) {
-//                                    sourceType = .camera
-//                                    showingImagePicker = true
-//                                },
-//                                .default(Text("Galeria")) {
-//                                    sourceType = .photoLibrary
-//                                    showingImagePicker = true
-//                                },
-//                                .cancel()
-//                            ])
+                        
+//                        // MARK: - Tool: song
+//                        Button(action: {
+//                            
+//                        }, label: {
+//                            Image(systemName: "music.note")
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(width: 28, height: 30, alignment: .center)
+//                                .foregroundColor(Color.blueColor)
 //                        })
-                        
-                        
-                        
-                        
-                        // MARK: - Tool: song
-                        Button(action: {
-                            
-                        }, label: {
-                            Image(systemName: "music.note")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 28, height: 30, alignment: .center)
-                                .foregroundColor(Color.blueColor)
-                        })
                         
                         // MARK: - Tool: draw
                         
                         Button(action: {
+                            shouldScrollPencil.toggle()
                             pencilTapped.toggle()
                             
                         }, label: {
@@ -369,7 +362,8 @@ struct Canvas: View {
             }
             .onTapGesture {
                 self.endTextEditing()
-                self.dismiss = true
+                self.dismiss.toggle()
+                self.dismissText = true
             }
             .onAppear(perform: {
                 self.pencilTapped = false
@@ -385,6 +379,7 @@ struct Canvas: View {
 
             })
             .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing:
                                     Button(action: {
@@ -404,6 +399,7 @@ struct Canvas: View {
             )
             
         }
+        .preferredColorScheme(.light)
         
     }
     

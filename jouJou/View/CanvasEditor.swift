@@ -36,6 +36,7 @@ struct CanvasEditor: View {
                         .resizable()
                         .scaledToFit()
                  
+
                 }
                 .background(BackgroundCanvas(type: backgroundType).edgesIgnoringSafeArea(.all))
                 

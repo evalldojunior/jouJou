@@ -58,9 +58,9 @@ struct ImageView: View {
     @State private var rectPosition = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
-    @State var buttonIsShowing = false
-    @Binding var shouldScroll: Bool
-
+    @State var isEditing = false
+    //@Binding var shouldScroll: Bool
+    
     
     
     var body: some View {
@@ -71,57 +71,82 @@ struct ImageView: View {
             
             let simultaneous = SimultaneousGesture(magnificationGesture, rotationGesture)
                 .updating($simultaneousState) { value, state, transation in
-                    if value.first != nil && value.second != nil {
-                        state = .both(angle: value.second!, scale: value.first!)
-                    } else if value.first != nil {
-                        state = .zooming(scale: value.first!)
-                    } else if value.second != nil {
-                        state = .rotating(angle: value.second!)
-                    } else {
-                        state = .inactive
+                    if isEditing {
+                        if value.first != nil && value.second != nil {
+                            state = .both(angle: value.second!, scale: value.first!)
+                        } else if value.first != nil {
+                            state = .zooming(scale: value.first!)
+                        } else if value.second != nil {
+                            state = .rotating(angle: value.second!)
+                        } else {
+                            state = .inactive
+                        }
+                        //self.shouldScroll = false
                     }
                 }.onEnded { value in
-                    self.viewMagnificationState *= value.first ?? 1
-                    self.viewRotationState += value.second ?? Angle.zero
+                    if isEditing {
+                        self.viewMagnificationState *= value.first ?? 1
+                        self.viewRotationState += value.second ?? Angle.zero
+                        //self.shouldScroll = true
+                    }
                 }
-
+            
             ZStack (alignment: .topTrailing){
                 
                 if image != nil {
                     image?
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
+                        .scaledToFill()
+                        .frame(width: 300, height: 300)
+                        .cornerRadius(10)
                     
                 }
-                if buttonIsShowing{
+                if isEditing{
                     Button(action: {
                         withAnimation{
                             isShowingImageView = false
                         }
                     }, label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.blueColor)
+                        ZStack {
+                            Image(systemName: "xmark")
+                                .foregroundColor(Color.beigeColor)
+                                .font(.system(size: 14))
+                        }
+                        .frame(width:24 , height: 24)
+                        .clipped()
+                        .background(Color.blueColor)
+                        .cornerRadius(50)
+                        .shadow(radius: 6)
                     })
+                    .padding(5)
                 }
-            }.frame(width: 200, height: 200)
+            }
+            //.frame(width: 300, height: 300)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.blueColor, lineWidth: isEditing ? 2.0 : 0)
+                    .frame(width: 310, height: 310)
+            )
             .rotationEffect(rotationAngle)
             .scaleEffect(magnificationScale)
             .position(rectPosition)
             .gesture(
-                DragGesture(minimumDistance: 3)
+                DragGesture(minimumDistance: 1)
                     .onChanged { value in
-                        self.rectPosition = value.location
-                        self.shouldScroll = false
+                        if isEditing {
+                            self.rectPosition = value.location
+                            //self.shouldScroll = false
+                        }
                     }
                     .onEnded { _ in
-                        self.shouldScroll = true
+                        if isEditing {
+                           // self.shouldScroll = true
+                        }
                     }
             )
             .gesture(simultaneous)
             .onTapGesture {
-                buttonIsShowing.toggle()
+                isEditing.toggle()
             }
         }
     }
