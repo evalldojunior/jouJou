@@ -59,7 +59,7 @@ struct ImageView: View {
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
     @State var isEditing = false
-    @Binding var shouldScroll: Bool
+    //@Binding var shouldScroll: Bool
     
     
     
@@ -81,13 +81,13 @@ struct ImageView: View {
                         } else {
                             state = .inactive
                         }
-                        self.shouldScroll = false
+                        //self.shouldScroll = false
                     }
                 }.onEnded { value in
                     if isEditing {
                         self.viewMagnificationState *= value.first ?? 1
                         self.viewRotationState += value.second ?? Angle.zero
-                        self.shouldScroll = true
+                        //self.shouldScroll = true
                     }
                 }
             
@@ -131,16 +131,16 @@ struct ImageView: View {
             .scaleEffect(magnificationScale)
             .position(rectPosition)
             .gesture(
-                DragGesture(minimumDistance: shouldScroll ? 3 : 1000)
+                DragGesture(minimumDistance: 1)
                     .onChanged { value in
                         if isEditing {
                             self.rectPosition = value.location
-                            self.shouldScroll = false
+                            //self.shouldScroll = false
                         }
                     }
                     .onEnded { _ in
                         if isEditing {
-                            self.shouldScroll = true
+                           // self.shouldScroll = true
                         }
                     }
             )

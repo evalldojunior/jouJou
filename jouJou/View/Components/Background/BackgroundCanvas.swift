@@ -17,10 +17,13 @@ struct BackgroundCanvas: View {
                 if type != "Papel-Liso" {
                     
                     VStack (spacing: 29){
-                        ForEach((0..<100), id: \.self) { _ in
-                            Divider()
+                        ForEach((0..<200), id: \.self) { _ in
+                            ExDivider()
                                 .frame(width: geometry.size.width)
-                                .background(Color(#colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 0.5999765965)))
+                            //Divider()
+                                //.frame(width: geometry.size.width)
+                                //.background(Color.lightSalmonColor.opacity(0.05))
+                                //.background(Color(#colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 0.5999765965)))
                         }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
@@ -54,9 +57,12 @@ struct BackgroundCanvas2: View {
                 if type == "Papel-Quadriculado" {
                     HStack (spacing: 29){
                         ForEach((0..<50), id: \.self) { _ in
-                            Divider()
+                            ExDivider2()
                                 .frame(height: geometry.size.height)
-                                .background(Color(#colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 0.5999765965)))
+//                            Divider()
+//                                .frame(height: geometry.size.height)
+                                //.background(Color(#colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 0.5999765965)))
+                                .background(Color.lightSalmonColor.opacity(0.05))
                         }
                     }
                     .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
@@ -72,5 +78,25 @@ struct BackgroundCanvas2: View {
 struct BackgroundCanvas_Previews: PreviewProvider {
     static var previews: some View {
         BackgroundCanvas(type: "Papel-Quadriculado")
+    }
+}
+
+struct ExDivider: View {
+    
+    var body: some View {
+        Rectangle()
+            .fill(Color.blueColor.opacity(0.1))
+            .frame(height: 1)
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct ExDivider2: View {
+    
+    var body: some View {
+        Rectangle()
+            .fill(Color.blueColor.opacity(0.1))
+            .frame(width: 1)
+            .edgesIgnoringSafeArea(.all)
     }
 }

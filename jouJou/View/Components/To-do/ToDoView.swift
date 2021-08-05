@@ -12,7 +12,7 @@ struct ToDoView: View {
     @State  var isShowingToDo: Bool = true
     @State  var holdingText: String = "Eu diria que..."
     @State var squareForegroundColor = Color.clear
-    @State var taskForegroundColor = Color(#colorLiteral(red: 0.662745098, green: 0.6588235294, blue: 0.6509803922, alpha: 1))
+    @State var taskForegroundColor = Color(#colorLiteral(red: 0.4225608706, green: 0.4200535417, blue: 0.4244911075, alpha: 1))
     @State var buttonTapped = false
     @Binding var dismiss: Bool
     
@@ -28,7 +28,7 @@ struct ToDoView: View {
                             taskForegroundColor = Color.blueColor
                         }else{
                             squareForegroundColor = Color.clear
-                            taskForegroundColor = Color(#colorLiteral(red: 0.662745098, green: 0.6588235294, blue: 0.6509803922, alpha: 1))
+                            taskForegroundColor = Color(#colorLiteral(red: 0.4225608706, green: 0.4200535417, blue: 0.4244911075, alpha: 1))
                         }
                     }
                 }, label: {

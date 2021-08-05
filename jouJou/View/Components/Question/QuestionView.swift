@@ -47,12 +47,15 @@ struct QuestionView: View {
                 }
                 ZStack (alignment: .topLeading){
                     TextEditor(text: $holdingText)
+                        .frame(width: 630, height: height2 < 120 ? 120 : height2)
+                        .introspectTextView { textView in
+                            textView.isScrollEnabled = false
+                        }
                         .font(Font.custom("Raleway-Regular", size: 20))
-                        .foregroundColor(Color.gray)
-                        .padding()
+                        .foregroundColor(Color(#colorLiteral(red: 0.4225608706, green: 0.4200535417, blue: 0.4244911075, alpha: 1)))
+                        .padding(15)
                         .background(Color.lightSalmonColor)
                         .cornerRadius(10)
-                        .frame(width: 660, height: height2)
                         .onTapGesture {
                             dismiss = false
                             if holdingText == "Eu diria que..." {
@@ -86,7 +89,7 @@ struct QuestionView_Previews: PreviewProvider {
     }
 }
 struct ViewHeightKey2: PreferenceKey {
-    static var defaultValue: CGFloat { 140 } //quase nada amkigo
+    static var defaultValue: CGFloat { 0 } //quase nada amkigo
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
         print("Reporting height: \(value)")

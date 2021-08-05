@@ -7,6 +7,8 @@
 
 import Foundation
 import SwiftUI
+import Introspect
+
 enum SimultaneousState {
     case inactive
     case rotating(angle: Angle)
@@ -43,6 +45,7 @@ struct TextView: View {
     @State var viewMagnificationState = CGFloat(1.0)
     @State var isShowingTextView = true
     @Binding var shouldScroll: Bool
+    @Binding var dismiss: Bool
 
     
     var rotationAngle: Angle {
@@ -62,16 +65,16 @@ struct TextView: View {
     @State private var degree = 0.0
     @State var lastScaleValue: CGFloat = 1.0
     @State var isEditing = false
-//    @Binding var dismiss: Bool
     
     
-    init(shouldScroll: Binding<Bool>, conteudo:String){
+    
+    init(shouldScroll: Binding<Bool>, dismiss: Binding<Bool>, conteudo:String){
         //Remove the default background of the TextEditor/UITextView
         UITextView.appearance().isScrollEnabled = false
         UITextView.appearance().backgroundColor = .clear
         self.conteudo = conteudo
         self._shouldScroll = shouldScroll
-//        self._dismiss = dismiss
+        self._dismiss = dismiss
     }
     
     var body: some View {
@@ -102,30 +105,27 @@ struct TextView: View {
                     }
                 }
 
-            VStack(alignment: .center) {             
+                       
                 ZStack (alignment: .top){
                     TextEditor(text: $text)
+                        .introspectTextView { textView in
+                            textView.isScrollEnabled = false
+                        }
                         .frame(width: width + 17, height: height + 17)
                         .fixedSize(horizontal: false, vertical: true)
                         .font(Font.custom("Raleway-Regular", size: 24))
                         .foregroundColor(Color.blackColor)
                         .multilineTextAlignment(.center)
-                        .introspectTextView { textView in
-                            textView.isScrollEnabled = false
-                        }
                         .onTapGesture {
                             withAnimation{
-                                isEditing = true
+                                isEditing.toggle()
+                                self.dismiss = false
                             }
                             if self.text == "Clique aqui para adicionar o texto" {
                                 self.text = " "
                             }
                         }
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.blueColor, lineWidth: isEditing ? 2.0 : 0)
-                                .frame(width: width + 70, height: height + 15)
-                        )
+                        
                         
                     
                     
@@ -167,39 +167,52 @@ struct TextView: View {
                     }.frame(width: width + 70)
                     
                 }
-                .rotationEffect(rotationAngle)
-                .scaleEffect(magnificationScale)
-                .position(rectPosition)
-                .gesture(
-                    DragGesture(minimumDistance: shouldScroll ? 3 : 1000)
-                        .onChanged { value in
-                            if isEditing {
-                                self.rectPosition = value.location
-                                self.shouldScroll = false
-                            }
-                        }
-                        .onEnded { _ in
-                            if isEditing {
-                                self.shouldScroll = true
-                            }
-                        }
-                )
-                .gesture(simultaneous)
+                
                 .onPreferenceChange(ViewHeightKey.self) { height = $0 }
                 .onPreferenceChange(ViewWidthKey.self) { width = $0 }
 //                .frame(width: width, height: height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
 //                .background(Color.red.opacity(0.5))
-                .onTapGesture {
-                    isEditing.toggle()
-                    //self.endTextEditing()
-
-                }
+                //.frame(width: width + 17, height: height + 17)
+                //.background(Color.red)
+                
+//                .onTapGesture {
+//                    isEditing.toggle()
+//                    self.dismiss = false
+//                    print("TOCOU")
+//                    //self.endTextEditing()
+//
+//                }
                 
                 
-            }
-//            .onChange(of: dismiss, perform: { value in
-//                self.isEditing = false
-//            })
+            
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.blueColor, lineWidth: isEditing ? 2.0 : 0)
+                    .frame(width: width + 70, height: height + 15)
+            )
+            .rotationEffect(rotationAngle)
+            .scaleEffect(magnificationScale)
+            .position(rectPosition)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        if isEditing {
+                            self.shouldScroll = false
+                            self.rectPosition = value.location
+                        }
+                    }
+                    .onEnded { _ in
+                        if isEditing {
+                            self.shouldScroll = true
+                        }
+                    }
+            )
+            .gesture(simultaneous)
+            .onChange(of: dismiss, perform: { value in
+                if dismiss {
+                    self.isEditing = false
+                } 
+            })
             //.frame(width: width+100, height: height+100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
             
             //        .background(Color.black.onTapGesture {
@@ -232,7 +245,6 @@ struct ViewHeightKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
-        print("Reporting height: \(value)")
     }
 }
 
@@ -240,6 +252,5 @@ struct ViewWidthKey: PreferenceKey {
     static var defaultValue: CGFloat { 0 }
     static func reduce(value: inout Value, nextValue: () -> Value) {
         value = value + nextValue()
-        print("Reporting width: \(value)")
     }
 }
