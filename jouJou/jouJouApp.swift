@@ -19,7 +19,7 @@ struct jouJouApp: App {
             }
             //Introduction()
             //SelectStyle(name: "Evaldo")
-            //Humor()
+            Humor()
             //Home()
             //Calendar()
                 //.environment(\.managedObjectContext, persistenceController.container.viewContext)

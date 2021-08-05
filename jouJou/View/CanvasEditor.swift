@@ -90,17 +90,17 @@ struct CanvasEditor: View {
                         
                         //imagens
                         ForEach((0..<image.count), id: \.self) { i in
-                            ImageView(image: image[i], shouldScroll: $shouldScroll)
+                            ImageView(image: image[i])
                         }
                         
                         //stickers
                         ForEach((0..<stickersTapped.count), id: \.self) { k in
-                            ImageView(image: Image(stickersTapped[k]), shouldScroll: $shouldScroll)
+                            ImageView(image: Image(stickersTapped[k]))
                         }
                         
                         //textos
                         ForEach((0..<text), id: \.self) { _ in
-                            TextView(shouldScroll: $shouldScroll, conteudo: conteudo)
+                            TextView(shouldScroll: $shouldScroll, dismiss: $dismiss, conteudo: conteudo)
                         }
                         
                     }
