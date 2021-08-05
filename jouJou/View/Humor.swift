@@ -181,7 +181,9 @@ struct Humor: View {
             }
             .navigationTitle("")
             .navigationBarHidden(true)
-        }
+        }.onAppear(perform: {
+            UserDefaults.standard.set(true, forKey: "FirstLaunch")
+        })
         .navigationTitle("")
         .navigationBarHidden(true)
         .accentColor(Color.blueColor)

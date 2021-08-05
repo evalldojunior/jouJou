@@ -128,7 +128,7 @@ struct Introduction: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                NavigationLink(destination: SelectStyle(name: UserDefaults.standard.string(forKey: "Nome") ?? name)) {
+                                NavigationLink(destination: Humor()) {
                                     Button(action: {
                                         //action
                                     }, label: {
